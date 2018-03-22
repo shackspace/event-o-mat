@@ -40,9 +40,9 @@ class SeriesSerialiser(serializers.ModelSerializer):
         )
 
 
-class EventSerialiser(serializers.ModelSerializer):
+class EventListSerialiser(serializers.ModelSerializer):
     room = RoomSerialiser(many=False)
-    series = SeriesSerialiser(many=False)
+    series = SeriesSerialiser(many=False, required=False)
     attendances = AttendanceSerialiser(many=True, read_only=True)
 
     class Meta:
@@ -51,4 +51,18 @@ class EventSerialiser(serializers.ModelSerializer):
             'id', 'name', 'description', 'start', 'end',
             'publish', 'room', 'series', 'keyholder',
             'attendances',
+        )
+
+
+class EventEditSerialiser(serializers.ModelSerializer):
+
+    def validate(self, data):
+        data['keyholder'] = self.context['request'].user
+        return data
+
+    class Meta:
+        model = Event
+        fields = (
+            'id', 'name', 'description', 'start', 'end',
+            'publish', 'room', 'series',
         )

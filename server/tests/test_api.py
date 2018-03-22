@@ -1,7 +1,11 @@
 import json
+from datetime import timedelta
 
 import pytest
 import pytz
+from django.utils.timezone import now
+
+from eventomat.event.models import Event
 
 
 @pytest.mark.django_db()
@@ -55,3 +59,21 @@ def test_series_list(series, client):
         'end': None,
         'room': None,
     }
+
+
+@pytest.mark.django_db()
+def test_create_event(client, room, keyholder_user):
+    count = Event.objects.count()
+    event_data = {
+        'name': 'Teh Event',
+        'start': (now() + timedelta(days=1)).isoformat(),
+        'end': (now() + timedelta(hours=25)).isoformat(),
+        'publish': True,
+        'room': room.id,
+    }
+    response = client.post('/events/', data=event_data)
+    assert response.status_code == 401
+    client.force_login(keyholder_user)
+    response = client.post('/events/', data=event_data)
+    assert response.status_code == 201, response.content.decode()
+    assert Event.objects.count() == count + 1

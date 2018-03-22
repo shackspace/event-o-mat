@@ -4,7 +4,9 @@ from rest_framework.response import Response
 
 from .models import Attendance, Event, Room, Series
 from .permissions import KeyholderPermission
-from .serialisers import EventSerialiser, RoomSerialiser, SeriesSerialiser
+from .serialisers import (
+    EventEditSerialiser, EventListSerialiser, RoomSerialiser, SeriesSerialiser,
+)
 
 
 class RoomViewSet(viewsets.ReadOnlyModelViewSet):
@@ -21,8 +23,12 @@ class SeriesViewSet(viewsets.ModelViewSet):
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
-    serializer_class = EventSerialiser
     permission_classes = (KeyholderPermission, )
+
+    def get_serializer_class(self, *args, **kwargs):
+        if self.action == 'list':
+            return EventListSerialiser
+        return EventEditSerialiser
 
     @detail_route(methods=['post'])
     def attend(self, request, pk):
