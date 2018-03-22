@@ -1,0 +1,14 @@
+[run]
+branch = True
+source = eventomat
+omit = */admin.py
+       */migrations/*
+       */settings*
+       */urls.py
+       */tests/*
+       */wsgi.py
+       */apps.py
+       */__init__.py
+       */__main__.py
+       */celery_app.py
+       */manage.py

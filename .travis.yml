@@ -1,0 +1,14 @@
+language: python
+sudo: false
+python: 3.6
+dist: trusty
+install:
+  - cd server/
+  - pip install -U pip setuptools wheel typing codecov coverage
+  - pip install -Ur requirements.txt -r requirements_development.txt
+script:
+  - python manage.py migrate
+  - pylama
+  - isort -rc -c .
+  - py.test --cov=eventomat tests/ && codecov
+  - pip list -o --format=columns
