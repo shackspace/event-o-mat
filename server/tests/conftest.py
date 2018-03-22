@@ -4,7 +4,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.utils.timezone import now
 
-from eventomat.event.models import Event, Room, Series, Attendance
+from eventomat.event.models import Attendance, Event, Room, Series
 
 
 @pytest.fixture
