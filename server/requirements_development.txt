@@ -1,3 +1,4 @@
 pylama
 isort
 pytest
+pytest-django
