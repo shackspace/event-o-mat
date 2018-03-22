@@ -6,7 +6,7 @@
 </template>
 <script>
 import AppBar from 'components/app-bar'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 import 'styles/style.styl'
 
@@ -35,6 +35,9 @@ export default {
 		changeTitle () {
 			document.title = this.title ? this.title + ' – event-o-mat' : 'shack event-o-mat'
 		},
+		loadEvents () {
+			this.$store.dispatch('fetch-events')
+		}
 	}
 }
 </script>

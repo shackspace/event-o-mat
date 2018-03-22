@@ -7,7 +7,9 @@ import actions from './actions'
 Vue.use(Vuex)
 
 const state = {
-	user: null
+	user: null,
+	rooms: null,
+	events: null
 }
 
 const store = new Vuex.Store({

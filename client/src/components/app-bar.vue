@@ -7,12 +7,12 @@ nav.primary(:class="{'with-secondary': hasSecondaryNavbar}")
 	.left
 		router-link(:to="{name: 'users'}").logo
 			img(src="~assets/images/logo.svg")
-	bunt-tabs(:active-tab="activeTab")
-		bunt-tab(header="user management", id="a-tab", @selected="tabSelected")
-	.actions
-		.profile-wrapper(@click="")
-			img.profile(ref="profile", :src="user.profile.picture", @mouseenter="showProfileTooltip = true", @mouseleave="showProfileTooltip = false")
-			tooltip(:show="showProfileTooltip") Settings
+	//- bunt-tabs(:active-tab="activeTab")
+	//- 	bunt-tab(header="user management", id="a-tab", @selected="tabSelected")
+	//- .actions
+	//- 	.profile-wrapper(@click="")
+	//- 		img.profile(ref="profile", :src="user", @mouseenter="showProfileTooltip = true", @mouseleave="showProfileTooltip = false")
+	//- 		tooltip(:show="showProfileTooltip") Settings
 </template>
 <script>
 import { mapState } from 'vuex'

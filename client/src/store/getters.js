@@ -1,6 +1,6 @@
 const getters = {
 	ready (state, getters) {
-		return !!(state.user)
+		return !!(state.rooms)
 	}
 }
 
