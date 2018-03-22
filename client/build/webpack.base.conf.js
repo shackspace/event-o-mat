@@ -33,7 +33,7 @@ module.exports = {
 							modules: false,
 							loose: true,
 							targets: {
-								chrome: 61
+								chrome: 65
 							}}],
 						'@babel/stage-1',
 					],

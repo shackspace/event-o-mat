@@ -3,7 +3,7 @@
 	img(src="~assets/images/logo.svg")
 	h1 event-o-mat
 	h2 v1.alpha
-
+	h3 {{ username }}
 	form(@submit.prevent="submit")
 		bunt-input(name="username", v-model="username", label="username")
 		bunt-input(name="password", v-model="password", label="password", type="password")
@@ -19,9 +19,17 @@ export default {
 			password: ''
 		}
 	},
+	computed: {
+		a () {
+			return this.b
+		},
+		b () {
+			return this.a
+		}
+	},
 	methods: {
 		submit () {
-			api.auth.login(this.username, this.password).then(() => this.$router.go('/'))
+			api.auth.login(this.username, this.password).then(() => this.$router.push('/'))
 		}
 	}
 }
