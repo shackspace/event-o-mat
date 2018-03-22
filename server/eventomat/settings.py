@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Berlin'
 
 USE_I18N = True
 
@@ -127,6 +127,7 @@ STATIC_URL = '/static/'
 # CORS_ORIGIN_WHITELIST = []
 CORS_ORIGIN_ALLOW_ALL = True
 REST_FRAMEWORK = {
+    'DATETIME_FORMAT': "iso-8601",
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
