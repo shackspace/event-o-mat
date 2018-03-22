@@ -1,0 +1,54 @@
+// USAGE
+// .bi-view: root view
+//   .left-panel: left, static component
+//   .center-frame: center background (for example for empty state)
+//     .center-panel: sliding content panel
+
+$document-width = 520px
+$give = 25px
+
+.bi-view
+	display: flex
+	flex: 1
+	padding: 0
+	background-color: $clr-white
+	overflow: hidden
+	.left-panel
+		card()
+		border-radius: 0
+		width: $sidebar-list-width
+		z-index: 10
+		display: flex
+		flex-direction: column
+		flex-shrink: 0
+
+	.center-frame
+		position: relative
+		flex: 1
+		min-width: 700px
+		.empty-help
+			padding: 36px
+
+		.center-panel
+			position: absolute
+			left: -100px
+			top: 0
+			bottom: 0
+			right: 0
+			box-sizing: border-box
+			flex: 1
+			display: flex
+			padding-left: 100px
+			box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)
+			z-index: 5
+
+	// ANIMATIONS //
+	.bi-view-center-animation-enter-active
+		transition: transform .75s cubic-bezier(.26, 1.46, .63, 1)
+		transform: translateX(0px)
+
+	.bi-view-center-animation-leave-active
+		transition: transform 1s ease
+
+	.bi-view-center-animation-enter, &.bi-view-center-animation-leave-active
+		transform: translateX(-100%)

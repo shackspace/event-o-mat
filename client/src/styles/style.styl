@@ -1,0 +1,27 @@
+@import '_settings'
+variables()
+normalize-css()
+base()
+typography()
+components()
+
+.bunt-select-dropdown-menu
+	z-index: 9000000
+
+@import 'bi-view'
+
+a
+	color: $clr-shack
+	text-decoration: none
+
+html, body, #v-app
+	margin: 0
+	height: 100%
+	overflow: hidden
+
+body
+	background-color: $clr-grey-100
+
+#v-app
+	display: flex
+	flex-direction: column

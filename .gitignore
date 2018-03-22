@@ -26,13 +26,11 @@ media
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -115,5 +113,5 @@ venv.bak/
 .mypy_cache/
 
 node_modules
-
+config.dev.js
 # End of https://www.gitignore.io/api/python,django,vue,npm

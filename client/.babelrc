@@ -1,0 +1,14 @@
+{
+	"presets": [
+		[
+			"@babel/env", {
+				"modules": false,
+				"loose": true,
+				"targets": {
+					"chrome": 61
+				}
+			},
+		],
+		"@babel/stage-1"
+	]
+}
