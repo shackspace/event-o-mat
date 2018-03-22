@@ -5,22 +5,22 @@
 	h2 v1.alpha
 
 	form(@submit.prevent="submit")
-		bunt-input(name="username", v-model="username", label="Benutzername")
-		bunt-input(name="password", v-model="password", label="Passwort", type="password")
+		bunt-input(name="username", v-model="username", label="username")
+		bunt-input(name="password", v-model="password", label="password", type="password")
 		bunt-button(type="submit") Login
 </template>
 <script>
 import api from 'lib/api'
 
 export default {
-	data() {
+	data () {
 		return {
 			username: '',
 			password: ''
 		}
 	},
 	methods: {
-		submit() {
+		submit () {
 			api.auth.login(this.username, this.password).then(() => this.$router.go('/'))
 		}
 	}

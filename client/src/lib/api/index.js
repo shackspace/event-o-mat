@@ -1,17 +1,10 @@
+/* global Headers, fetch */
 import config from 'config'
 import querystring from 'querystring'
 
 const BASE_URL = config.api.baseUrl
 let headers = new Headers()
 headers.append('Content-Type', 'application/json')
-
-function request (url, body, method = 'GET') {
-	let options = {
-		method: method,
-		headers: headers
-	}
-	return fetch(BASE_URL + url, options)
-}
 
 export function cleanQuery (object) {
 	Object.keys(object).forEach(key => !object[key] && delete object[key])
@@ -22,10 +15,9 @@ let api = {
 	auth: {
 		authenticated: false,
 		login (username, password) {
-			return fetch(BASE_URL + 'token/', {method: 'POST', headers: headers, body: JSON.stringify({username: username, password: password})})
-			.then((response) => {
+			return fetch(BASE_URL + 'token/', {method: 'POST', headers: headers, body: JSON.stringify({username: username, password: password})}).then((response) => {
 				if (!response.ok)
-					return Promise.reject()
+					return Promise.reject(response.statusCode)
 				return response.json()
 			}).then((json) => {
 				localStorage.setItem('user', JSON.stringify(json))
@@ -36,7 +28,7 @@ let api = {
 		},
 		getSession () {
 			let user = JSON.parse(localStorage.getItem('user'))
-			if (!user) return Promise.reject()
+			if (!user) return Promise.reject(new Error('no session'))
 			headers.set('Authorization', 'Token ' + user.token)
 			api.auth.authenticated = true
 			return Promise.resolve()
