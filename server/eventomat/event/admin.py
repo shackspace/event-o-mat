@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Attendance, Event, Room, Series
+
+admin.site.register(Room)
+admin.site.register(Event)
+admin.site.register(Series)
+admin.site.register(Attendance)
