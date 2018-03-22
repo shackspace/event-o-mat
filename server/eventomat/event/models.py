@@ -10,9 +10,9 @@ class Room(models.Model):
 
 class Series(models.Model):
     name = models.CharField(max_length=140)
-    start = models.TimeField(null=True)
-    end = models.TimeField(null=True)
-    room = models.ForeignKey(to=Room, on_delete=models.PROTECT, null=True, related_name='series')
+    start = models.TimeField(null=True, blank=True)
+    end = models.TimeField(null=True, blank=True)
+    room = models.ForeignKey(to=Room, on_delete=models.PROTECT, null=True, blank=True, related_name='series')
 
     def __str__(self):
         return 'Series: {name}'.format(name=self.name)
