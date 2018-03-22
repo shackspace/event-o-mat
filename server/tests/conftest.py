@@ -4,12 +4,17 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.utils.timezone import now
 
-from eventomat.event.models import Event, Room, Series
+from eventomat.event.models import Event, Room, Series, Attendance
 
 
 @pytest.fixture
 def keyholder_user():
-    return get_user_model().objects.create(username='keyholderrr')
+    return get_user_model().objects.create(username='keyholderrr', is_staff=True)
+
+
+@pytest.fixture
+def regular_user():
+    return get_user_model().objects.create(username='normalo')
 
 
 @pytest.fixture
@@ -45,3 +50,8 @@ def event_with_series(room, keyholder_user, series):
         series=series,
         room=room
     )
+
+
+@pytest.fixture()
+def attendance(event_with_series, regular_user):
+    return Attendance.objects.create(user=regular_user, event=event_with_series, state='yes')

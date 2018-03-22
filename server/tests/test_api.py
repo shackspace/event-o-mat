@@ -17,7 +17,7 @@ def test_room_list(room, client):
 
 
 @pytest.mark.django_db()
-def test_event_list(event_with_series, client):
+def test_event_list(event_with_series, client, attendance):
     event = event_with_series
     response = client.get('/events/')
     assert response.status_code == 200
@@ -33,6 +33,12 @@ def test_event_list(event_with_series, client):
         'series': {'id': event.series.id, 'name': event.series.name, 'room': None, 'start': None, 'end': None},
         'keyholder': event.keyholder.id,
         'room': {'id': event.room.id, 'name': event.room.name},
+        'attendances': [
+            {
+                'user': {'username': attendance.user.username, 'id': attendance.user.id},
+                'state': attendance.state,
+            }
+        ]
     }
 
 
