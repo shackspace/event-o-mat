@@ -13,7 +13,7 @@
 export default {
 	components: {},
 	props: {
-		id: String
+		id: Number
 	},
 	data () {
 		return {

@@ -5,7 +5,7 @@ When there is an active project, the projects tab-nav is shown
 <template lang="jade">
 nav.primary(:class="{'with-secondary': hasSecondaryNavbar}")
 	.left
-		router-link(:to="{name: 'users'}").logo
+		router-link(:to="{name: 'events:list'}").logo
 			img(src="~assets/images/logo.svg")
 	//- bunt-tabs(:active-tab="activeTab")
 	//- 	bunt-tab(header="user management", id="a-tab", @selected="tabSelected")
