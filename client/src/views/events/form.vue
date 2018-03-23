@@ -1,12 +1,11 @@
 <template lang="jade">
-.c-new-event(v-scrollbar.y="")
-	h1 Go on, create a new event!
+.c-event-form
 	bunt-input(name="name", label="Event Name", v-model="formData.name", :validation="$v.formData.name")
 	bunt-input(name="description", label="Description", v-model="formData.description", :validation="$v.formData.description")
 	bunt-input(name="start", label="Start Date/Time", v-model="formData.start", :validation="$v.formData.start")
 	bunt-input(name="end", label="End Date/Time", v-model="formData.end", :validation="$v.formData.end")
 	bunt-select(name="room", label="Room", v-model="formData.room", :options="rooms", option-label="name", option-value="id", :validation="$v.formData.room")
-	bunt-button#create(@click.native="create", :loading="saving", :error!="errorSaving") create
+	bunt-button#create(@click.native="save", :loading="saving", :error!="errorSaving") create
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -17,6 +16,9 @@ import { apiValidator, apiValidatorMixin } from 'components/mixins/api-error-val
 export default {
 	components: {},
 	mixins: [apiValidatorMixin],
+	prop: {
+		event: Object
+	},
 	data () {
 		return {
 			formData: {
@@ -58,22 +60,25 @@ export default {
 	computed: {
 		...mapState(['rooms'])
 	},
-	created () {},
+	created () {
+		if (this.event) {
+			this.formData = this.event
+		}
+	},
 	mounted () {
 		this.$nextTick(() => {
 		})
 	},
 	methods: {
-		create () {
+		save () {
 			this.clearApiErrors()
 			this.$v.$touch()
 			if (this.$v.$invalid) return
 			this.saving = true
-			api.events.create(this.formData).then((event) => {
+			api.events[this.event ? 'update' : 'create'](this.formData).then((event) => {
 				this.$router.push({name: 'events:item', params: {id: event.id}})
 				this.clearApiErrors()
 			}).catch((error) => {
-				console.log(error)
 				this.saving = false
 				this.errorSaving = true
 				this.handleApiErrors(error)

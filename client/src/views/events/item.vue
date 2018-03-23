@@ -1,6 +1,13 @@
 <template lang="jade">
 .c-event-item
 	bunt-progress-circular(v-if="!event", size="huge", :page="true")
+	template(v-else)
+		router-view(v-if="$route.name === 'events:edit'", :event="event")
+		template(v-else)
+			h1 {{ event.name }}
+			h4 {{ event.start | datetime }} – {{ event.end | datetime }}
+			h4 {{ event.room }}
+			p {{ event.description }}
 </template>
 <script>
 export default {
@@ -27,4 +34,7 @@ export default {
 }
 </script>
 <style lang="stylus">
+.c-event-item
+	width: 900px
+	align-self: center
 </style>

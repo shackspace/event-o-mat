@@ -25,3 +25,31 @@ body
 #v-app
 	display: flex
 	flex-direction: column
+
+.list
+	display: flex
+	flex-direction: column
+	.thead, .tbody .item
+		display: flex
+		align-items: center
+		border-bottom: border-separator()
+		flex: 0 0
+		color: $clr-primary-text-light
+		> :first-child
+			padding-left: 32px
+		> :last-child
+			padding-right: 32px
+	.thead
+		height: 64px
+		font-weight: 600
+	.tbody
+		display: flex
+		flex-direction: column
+		position: relative
+
+		.item
+			height: 40px
+			cursor: pointer
+
+			&:hover
+				background-color $clr-grey-200

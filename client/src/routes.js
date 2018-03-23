@@ -2,7 +2,7 @@ import App from './App'
 import Login from 'views/login'
 
 import EventsList from 'views/events'
-import NewEvent from 'views/events/new'
+import EventForm from 'views/events/form'
 import Event from 'views/events/item'
 
 let routes = [{
@@ -17,12 +17,17 @@ let routes = [{
 	}, {
 		path: 'events/new',
 		name: 'events:new',
-		component: NewEvent
+		component: EventForm
 	}, {
 		path: 'events/:id',
 		name: 'events:item',
 		component: Event,
-		props: true
+		props: true,
+		children: [{
+			path: 'edit',
+			name: 'events:edit',
+			component: EventForm
+		}]
 	}]
 }, {
 	path: '/login',
