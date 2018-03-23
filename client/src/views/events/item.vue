@@ -7,7 +7,7 @@ export default {
 	components: {},
 	props: {
 		id: String
-	}
+	},
 	data () {
 		return {
 			event: null

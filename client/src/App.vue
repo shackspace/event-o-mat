@@ -43,6 +43,7 @@ export default {
 </script>
 <style lang="stylus">
 #v-app
+	background-color: $clr-white
 	> .failing
 		display: flex
 		flex-direction: column

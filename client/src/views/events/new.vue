@@ -1,24 +1,63 @@
 <template lang="jade">
-.c-new-event
-	bunt-input(name="name", label="Event Name", v-model="formData.name")
-	bunt-input(name="description", label="Description", v-model="formData.description")
-	bunt-button(@click.native="create", :loading="sending") create
+.c-new-event(v-scrollbar.y="")
+	h1 Go on, create a new event!
+	bunt-input(name="name", label="Event Name", v-model="formData.name", :validation="$v.formData.name")
+	bunt-input(name="description", label="Description", v-model="formData.description", :validation="$v.formData.description")
+	bunt-input(name="start", label="Start Date/Time", v-model="formData.start", :validation="$v.formData.start")
+	bunt-input(name="end", label="End Date/Time", v-model="formData.end", :validation="$v.formData.end")
+	bunt-select(name="room", label="Room", v-model="formData.room", :options="rooms", option-label="name", option-value="id", :validation="$v.formData.room")
+	bunt-button#create(@click.native="create", :loading="saving", :error!="errorSaving") create
 </template>
 <script>
+import { mapState } from 'vuex'
 import api from 'lib/api'
+import { required } from 'buntpapier/src/vuelidate/validators'
+import { apiValidator, apiValidatorMixin } from 'components/mixins/api-error-validation'
 
 export default {
 	components: {},
+	mixins: [apiValidatorMixin],
 	data () {
 		return {
 			formData: {
 				name: '',
-				description: ''
+				description: '',
+				start: '',
+				end: '',
+				room: null
 			},
-			sending: false
+			saving: false,
+			errorSaving: false
 		}
 	},
-	computed: {},
+	validations () {
+		return {
+			formData: {
+				name: {
+					apiValidator: apiValidator.bind(this)('name'),
+					required: required('Events without names are pretty useless, eh?')
+				},
+				description: {
+					apiValidator: apiValidator.bind(this)('description'),
+				},
+				start: {
+					apiValidator: apiValidator.bind(this)('start'),
+					required: required('event needs a start date')
+				},
+				end: {
+					apiValidator: apiValidator.bind(this)('end'),
+					required: required('event needs an end date')
+				},
+				room: {
+					apiValidator: apiValidator.bind(this)('room'),
+					required: required('need to choose a room!')
+				}
+			}
+		}
+	},
+	computed: {
+		...mapState(['rooms'])
+	},
 	created () {},
 	mounted () {
 		this.$nextTick(() => {
@@ -26,13 +65,35 @@ export default {
 	},
 	methods: {
 		create () {
-			this.sending = true
-			api.events.create(formData).then((event) => {
-				this.$router.push({name: 'event:item', params: {id: event.id}})
+			this.clearApiErrors()
+			this.$v.$touch()
+			if (this.$v.$invalid) return
+			this.saving = true
+			api.events.create(this.formData).then((event) => {
+				this.$router.push({name: 'events:item', params: {id: event.id}})
+				this.clearApiErrors()
+			}).catch((error) => {
+				console.log(error)
+				this.saving = false
+				this.errorSaving = true
+				this.handleApiErrors(error)
 			})
 		}
 	}
 }
 </script>
 <style lang="stylus">
+@import '~_settings'
+.c-new-event
+	display: flex
+	flex-direction: column
+	align-items: center
+	.bunt-input
+		width: 25vw
+		min-width: 240px
+		.hint
+			ellipsis()
+			overflow: visible
+	#create
+		button-style(color: $clr-shack)
 </style>

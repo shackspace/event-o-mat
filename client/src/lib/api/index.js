@@ -68,9 +68,12 @@ api.fetch = function (url, method, body) {
 	}
 	return window.fetch(url.startsWith('http') ? url : BASE_URL + url, options).then((response) => {
 		return response.json().then((json) => {
-			if (!response.ok)
-				return Promise.reject(json)
-
+			if (!response.ok) {
+				const error = new Error('Request Failed!')
+				error.response = response
+				error.json = json
+				return Promise.reject(error)
+			}
 			return Promise.resolve(json)
 		})
 	}).catch((error) => {

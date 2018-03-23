@@ -1,17 +1,20 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Buntpapier from 'buntpapier'
+import Vuelidate from 'vuelidate'
 import moment from 'moment'
 
 import api from 'lib/api'
 import store from 'store'
 import routes from './routes'
+import 'components/directives'
 import 'components/filters'
 
 import Main from './main.vue'
 
 Vue.use(Router)
 Vue.use(Buntpapier)
+Vue.use(Vuelidate)
 
 Vue.moment = moment
 
