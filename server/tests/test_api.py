@@ -35,8 +35,8 @@ def test_event_list(event_with_series, client, attendance):
         'end': event.end.astimezone(pytz.timezone('Europe/Berlin')).isoformat(),
         'publish': event.publish,
         'series': {'id': event.series.id, 'name': event.series.name, 'room': None, 'start': None, 'end': None},
-        'keyholder': event.keyholder.id,
-        'room': {'id': event.room.id, 'name': event.room.name},
+        'keyholder': {'id': event.keyholder.id, 'username': event.keyholder.username},
+        'room': event.room.id,
         'attendances': [
             {
                 'user': {'username': attendance.user.username, 'id': attendance.user.id},

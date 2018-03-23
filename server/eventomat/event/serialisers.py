@@ -31,7 +31,6 @@ class RoomSerialiser(serializers.ModelSerializer):
 
 
 class SeriesSerialiser(serializers.ModelSerializer):
-    room = RoomSerialiser(many=False)
 
     class Meta:
         model = Series
@@ -41,9 +40,9 @@ class SeriesSerialiser(serializers.ModelSerializer):
 
 
 class EventListSerialiser(serializers.ModelSerializer):
-    room = RoomSerialiser(many=False)
     series = SeriesSerialiser(many=False, required=False)
     attendances = AttendanceSerialiser(many=True, read_only=True)
+    keyholder = UserSerialiser(many=False)
 
     class Meta:
         model = Event
