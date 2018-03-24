@@ -77,3 +77,23 @@ def test_create_event(client, room, keyholder_user):
     response = client.post('/events/', data=event_data)
     assert response.status_code == 201, response.content.decode()
     assert Event.objects.count() == count + 1
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('use', (None, 'regular', 'keyholder'))
+@pytest.mark.parametrize('url', ('/events/', '/series/', '/rooms/'))
+def test_can_access(series, room, event_without_series, client, regular_user, keyholder_user, use, url):
+    if use is None:
+        client.logout
+    elif use == 'regular':
+        client.force_login(regular_user)
+    elif use == 'keyholder':
+        client.force_login(keyholder_user)
+
+    response = client.get(url, follow=True)
+    content = json.loads(response.content.decode())
+
+    assert response.status_code == 200
+    assert len(content) == 1
+    assert isinstance(content, list)
+    assert isinstance(content[0], dict)
