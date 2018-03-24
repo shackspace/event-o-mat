@@ -33,10 +33,10 @@ class EventViewSet(viewsets.ModelViewSet):
     @detail_route(methods=['post'])
     def attend(self, request, pk):
         event = self.get_object()
-        state = request.POST.get('state', 'yes')
+        state = request.data.get('state', 'yes')
         if state not in ('yes', 'no', 'maybe'):
             return Response(
-                'Status must be yes, no, or maybe, not {state}.'.format(state),
+                'Status must be yes, no, or maybe, not {state}.'.format(state=state),
                 status=status.HTTP_400_BAD_REQUEST,
             )
         if request.user.is_anonymous:
