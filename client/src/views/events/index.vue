@@ -1,7 +1,7 @@
 <template lang="jade">
 .c-events-index
 	.toolbar
-		router-link(:to="{name: 'events:new'}") new event
+		bunt-link-button(:to="{name: 'events:new'}") new event
 	.events-list.list
 		.tbody(v-scrollbar.y="")
 			router-link.event.item(v-for="event in events", :to="{name: 'events:item', params: {id: event.id}}")
@@ -32,6 +32,8 @@ export default {
 }
 </script>
 <style lang="stylus">
+@import '~_settings'
+
 .c-events-index
 	align-self: center
 	display: flex
@@ -41,6 +43,8 @@ export default {
 	.toolbar
 		height: 36px
 		line-height: @height
+		.bunt-link-button
+			link-button-style(color: $clr-primary)
 	.events-list
 		.event
 			.name

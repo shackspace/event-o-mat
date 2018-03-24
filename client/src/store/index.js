@@ -9,6 +9,7 @@ Vue.use(Vuex)
 const state = {
 	user: null,
 	rooms: null,
+	roomsLookup: {},
 	events: null
 }
 

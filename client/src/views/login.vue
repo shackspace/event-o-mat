@@ -63,6 +63,6 @@ export default {
 			width: 150px
 
 	.bunt-button
-		button-style(color: $clr-shack)
+		button-style(color: $clr-primary)
 
 </style>

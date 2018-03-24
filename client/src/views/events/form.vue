@@ -1,11 +1,16 @@
 <template lang="jade">
 .c-event-form
-	bunt-input(name="name", label="Event Name", v-model="formData.name", :validation="$v.formData.name")
-	bunt-input(name="description", label="Description", v-model="formData.description", :validation="$v.formData.description")
-	bunt-input(name="start", label="Start Date/Time", v-model="formData.start", :validation="$v.formData.start")
-	bunt-input(name="end", label="End Date/Time", v-model="formData.end", :validation="$v.formData.end")
-	bunt-select(name="room", label="Room", v-model="formData.room", :options="rooms", option-label="name", option-value="id", :validation="$v.formData.room")
-	bunt-button#create(@click.native="save", :loading="saving", :error!="errorSaving") create
+	bunt-input(name="name", label="Event Name", v-model="event.name", :validation="$v.event.name")
+	bunt-input(name="start", label="Start Date/Time", v-model="event.start", :validation="$v.event.start")
+	bunt-input(name="end", label="End Date/Time", v-model="event.end", :validation="$v.event.end")
+	bunt-select(name="room", label="Room", v-model="event.room", :options="rooms", option-label="name", option-value="id", :validation="$v.event.room")
+	p Description:
+	.description
+		textarea(v-model="event.description")
+	//- bunt-input(name="description", label="Description", v-model="event.description", :validation="$v.event.description")
+	.actions
+		bunt-button#create(@click.native="save", :loading="saving", :error!="errorSaving") {{ event ? 'save' : 'create' }}
+		bunt-link-button(:to="{name: 'events:item'}") cancel
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -16,25 +21,19 @@ import { apiValidator, apiValidatorMixin } from 'components/mixins/api-error-val
 export default {
 	components: {},
 	mixins: [apiValidatorMixin],
-	prop: {
+	props: {
 		event: Object
 	},
 	data () {
 		return {
-			formData: {
-				name: '',
-				description: '',
-				start: '',
-				end: '',
-				room: null
-			},
 			saving: false,
-			errorSaving: false
+			errorSaving: false,
+			backup: null
 		}
 	},
 	validations () {
 		return {
-			formData: {
+			event: {
 				name: {
 					apiValidator: apiValidator.bind(this)('name'),
 					required: required('Events without names are pretty useless, eh?')
@@ -61,9 +60,7 @@ export default {
 		...mapState(['rooms'])
 	},
 	created () {
-		if (this.event) {
-			this.formData = this.event
-		}
+		this.backup = Object.assign({}, this.event)
 	},
 	mounted () {
 		this.$nextTick(() => {
@@ -75,7 +72,7 @@ export default {
 			this.$v.$touch()
 			if (this.$v.$invalid) return
 			this.saving = true
-			api.events[this.event ? 'update' : 'create'](this.formData).then((event) => {
+			api.events[this.event ? 'update' : 'create'](this.event).then((event) => {
 				this.$router.push({name: 'events:item', params: {id: event.id}})
 				this.clearApiErrors()
 			}).catch((error) => {
@@ -89,16 +86,33 @@ export default {
 </script>
 <style lang="stylus">
 @import '~_settings'
-.c-new-event
+.c-event-form
 	display: flex
 	flex-direction: column
-	align-items: center
+	flex: 1 1 50vw
+	padding: 32px 64px 0
+	box-sizing: border-box
 	.bunt-input
 		width: 25vw
 		min-width: 240px
 		.hint
 			ellipsis()
 			overflow: visible
+	.description
+		flex: 1
+		position: relative
+		border: 2px solid $clr-grey
+		display: flex
+	textarea
+		flex: 1
+		resize: none
+		border: none
+	.actions
+		align-self: flex-end
 	#create
-		button-style(color: $clr-shack)
+		button-style(color: $clr-primary)
+
+		margin: 8px
+	.preview
+		flex: 1
 </style>
