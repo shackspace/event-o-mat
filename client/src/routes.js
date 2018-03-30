@@ -3,6 +3,7 @@ import Login from 'views/login'
 
 import EventsList from 'views/events'
 import Event from 'views/events/item'
+import Calendar from 'views/calendar'
 
 let routes = [{
 	path: '/',
@@ -27,6 +28,10 @@ let routes = [{
 		name: 'events:edit',
 		component: Event,
 		props: true
+	}, {
+		path: 'calendar',
+		name: 'calendar',
+		component: Calendar
 	}]
 }, {
 	path: '/login',

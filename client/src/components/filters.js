@@ -2,8 +2,14 @@ import Vue from 'vue'
 import moment from 'moment'
 
 const datetimeFormat = 'YYYY-MM-DD HH:mm'
+const timeFormat = 'HH:mm'
+
 Vue.filter('datetime', (date) => {
 	return moment(date).format(datetimeFormat)
+})
+
+Vue.filter('time', (date) => {
+	return moment(date).format(timeFormat)
 })
 
 Vue.filter('fromnow', (date) => {

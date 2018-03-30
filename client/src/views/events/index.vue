@@ -8,8 +8,8 @@
 				.name {{ event.name }}
 				.start {{ event.start | datetime }}
 				.end {{ event.end | datetime }}
-				.keyholder {{ event.keyholder }}
-				.room {{ event.room.name }}
+				.keyholder {{ event.keyholder.username }}
+				.room {{ roomsLookup[event.room].name }}
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -21,7 +21,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState(['events']),
+		...mapState(['events', 'roomsLookup']),
 	},
 	created () {},
 	mounted () {
@@ -51,5 +51,7 @@ export default {
 				flex: 1
 			.start, .end
 				width: 10em
+			.keyholder
+				padding-right: 16px
 
 </style>

@@ -11,7 +11,7 @@ import 'components/directives'
 import 'components/filters'
 
 import Main from './main.vue'
-
+moment.locale('en')
 Vue.use(Router)
 Vue.use(Buntpapier)
 Vue.use(Vuelidate)

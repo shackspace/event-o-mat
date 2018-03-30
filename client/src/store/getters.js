@@ -1,6 +1,6 @@
 const getters = {
 	ready (state, getters) {
-		return !!(state.rooms)
+		return !!(state.rooms) && !!(state.events)
 	}
 }
 
