@@ -4,14 +4,14 @@
 	template(v-else)
 		transition(name="edit")
 			.edit-pane(v-if="$route.name === 'events:edit' || $route.name === 'events:new'")
-				event-form(:event="event")
+				event-form(:event="event", :creation="$route.name === 'events:new'")
 		.preview
 			.heading
 				h1 {{ event.name }}
 				transition(name="edit-button")
 					bunt-link-button(v-if="$route.name !== 'events:edit'", :to="{name: 'events:edit'}") edit
 			h4 {{ event.start | datetime }} – {{ event.end | datetime }}
-			h4 {{ roomsLookup[event.room].name }}
+			h4 {{ event.room ? roomsLookup[event.room].name : '–' }}
 			.description(v-html="markdown", v-scrollbar.y="")
 </template>
 <script>

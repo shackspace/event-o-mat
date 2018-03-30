@@ -1,5 +1,8 @@
 <template lang="jade">
 .c-event-form
+	.actions
+		bunt-button#create(@click.native="save", :loading="saving", :error!="errorSaving") {{ creation ? 'create' : 'save' }}
+		bunt-link-button(:to="{name: 'events:item'}", @click.native="restore") cancel
 	bunt-input(name="name", label="Event Name", v-model="event.name", :validation="$v.event.name")
 	bunt-input(name="start", label="Start Date/Time", v-model="event.start", :validation="$v.event.start")
 	bunt-input(name="end", label="End Date/Time", v-model="event.end", :validation="$v.event.end")
@@ -8,9 +11,7 @@
 	.description
 		textarea(v-model="event.description")
 	//- bunt-input(name="description", label="Description", v-model="event.description", :validation="$v.event.description")
-	.actions
-		bunt-button#create(@click.native="save", :loading="saving", :error!="errorSaving") {{ event ? 'save' : 'create' }}
-		bunt-link-button(:to="{name: 'events:item'}") cancel
+
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -22,7 +23,11 @@ export default {
 	components: {},
 	mixins: [apiValidatorMixin],
 	props: {
-		event: Object
+		event: Object,
+		creation: {
+			type: Boolean,
+			default: false
+		}
 	},
 	data () {
 		return {
@@ -80,6 +85,9 @@ export default {
 				this.errorSaving = true
 				this.handleApiErrors(error)
 			})
+		},
+		restore () {
+			Object.assign(this.event, this.backup)
 		}
 	}
 }
