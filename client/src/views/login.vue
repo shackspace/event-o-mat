@@ -4,8 +4,8 @@
 	h1 event-o-mat
 	h2 v1.alpha
 	form(@submit.prevent="submit")
-		bunt-input(name="username", v-model="username", label="username")
-		bunt-input(name="password", v-model="password", label="password", type="password")
+		//- bunt-input(name="username", v-model="username", label="username")
+		//- bunt-input(name="password", v-model="password", label="password", type="password")
 		bunt-button(type="submit") Login
 </template>
 <script>
@@ -14,13 +14,13 @@ import api from 'lib/api'
 export default {
 	data () {
 		return {
-			username: '',
-			password: ''
+			// username: '',
+			// password: ''
 		}
 	},
 	methods: {
 		submit () {
-			api.auth.login(this.username, this.password).then(() => this.$router.push('/'))
+			api.auth.login()
 		}
 	}
 }

@@ -1,4 +1,4 @@
-/* global Headers, fetch */
+/* global Headers, URLSearchParams */
 import config from 'config'
 import querystring from 'querystring'
 
@@ -14,22 +14,20 @@ export function cleanQuery (object) {
 let api = {
 	auth: {
 		authenticated: false,
-		login (username, password) {
-			return fetch(BASE_URL + 'api-token-auth/', {method: 'POST', headers: headers, body: JSON.stringify({username: username, password: password})}).then((response) => {
-				if (!response.ok)
-					return Promise.reject(response.statusCode)
-				return response.json()
-			}).then((json) => {
-				localStorage.setItem('user', JSON.stringify(json))
-				api.auth.authenticated = true
-				headers.set('Authorization', 'Token ' + json.token)
-				return Promise.resolve(json)
-			})
+		login () {
+			window.location = `${BASE_URL}login/shackgitlab/`
 		},
 		getSession () {
-			let user = JSON.parse(localStorage.getItem('user'))
-			if (!user) return Promise.reject(new Error('no session'))
-			headers.set('Authorization', 'Token ' + user.token)
+			const queryParams = new URLSearchParams(window.location.hash.substring(1))
+			let token
+			if (queryParams.has('token')) {
+				token = queryParams.get('token')
+				localStorage.setItem('token', token)
+			} else {
+				token = localStorage.getItem('token')
+			}
+			if (!token) return Promise.reject(new Error('no session'))
+			headers.set('Authorization', 'Token ' + token)
 			api.auth.authenticated = true
 			return Promise.resolve()
 		}
