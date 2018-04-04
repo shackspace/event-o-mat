@@ -29,6 +29,6 @@ router.register(r'rooms', views.RoomViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^api-token-auth/', obtain_auth_token),
+    url('', include('social_django.urls', namespace='social')),
     url(r'^', include(router.urls)),
 ]

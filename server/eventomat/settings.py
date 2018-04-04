@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'social_django',
     'rest_framework',
     'rest_framework.authtoken',
     'eventomat.event',
@@ -133,3 +134,19 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     )
 }
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = False
+SOCIAL_AUTH_SLUGIFY_USERNAMES = True
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+
+
+try:
+    from .settings_production import *
+except ImportError:
+    pass
