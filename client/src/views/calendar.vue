@@ -77,11 +77,14 @@ export default {
 		grid-template-columns: repeat(7, 1fr)
 		grid-template-rows: 32px repeat(6, 1fr)
 		padding: 0 16px
+		grid-gap: 1px
 	.weekday
 		grid-row: 1
 	.day
+		outline: 1px solid $clr-grey-300
 		.label
 			color: $clr-secondary-text-light
+			padding: 4px 0 0 4px
 	.event
 		display: block
 		background-color: $clr-primary
