@@ -5,7 +5,7 @@ var utils = require('./utils')
 var path = require('path')
 var projectRoot = path.resolve(__dirname, '../')
 var baseWebpackConfig = require('./webpack.base.conf')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var CompressionPlugin = require('compression-webpack-plugin')
 var CleanWebpackPlugin = require('clean-webpack-plugin')
@@ -23,21 +23,23 @@ var webpackConfig = merge(baseWebpackConfig, {
 				loader:'vue-loader',
 				options: {
 					loaders: {
-						stylus: ExtractTextPlugin.extract({
-							use: ['css-loader', 'stylus-loader'],
-							fallback: 'vue-style-loader'
-						})
+						stylus: [
+							MiniCssExtractPlugin.loader,
+							'css-loader',
+							'stylus-loader'
+						]
 					}
 				}
 			}]},
-			{ test: /\.css$/, use: ExtractTextPlugin.extract({
-				fallback: 'style-loader',
-				use: 'css-loader'
-			})},
-			{ test: /\.styl$/, use: ExtractTextPlugin.extract({
-				fallback: 'style-loader',
-				use: ['css-loader', 'stylus-loader']
-			})}
+			{ test: /\.css$/, use: [
+				MiniCssExtractPlugin.loader,
+				"css-loader"
+			]},
+			{ test: /\.styl$/, use: [
+				MiniCssExtractPlugin.loader,
+				'css-loader',
+				'stylus-loader'
+			]},
 		]
 	},
 	output: {
@@ -71,9 +73,11 @@ var webpackConfig = merge(baseWebpackConfig, {
 			TARGET: process.env.TARGET == 'production' ? '"production"' : '"stage"'
 		}),
 		// extract css into its own file
-		new ExtractTextPlugin({
-			filename: utils.assetsPath('css/[name].[contenthash].css'),
-			allChunks: true
+		new MiniCssExtractPlugin({
+			// Options similar to the same options in webpackOptions.output
+			// both options are optional
+			filename: "[name].[chunkhash].css",
+			chunkFilename: "[id].[chunkhash].css"
 		}),
 		// generate dist index.html with correct asset hash for caching.
 		// you can customize output by editing /index.html
