@@ -114,6 +114,7 @@ venv.bak/
 
 node_modules
 config.dev.js
+build-stats.json
 # End of https://www.gitignore.io/api/python,django,vue,npm
 
 settings_production.py
