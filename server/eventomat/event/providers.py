@@ -11,5 +11,5 @@ class ShackGitLabOAuth2(GitLabOAuth2):
 
 def end_pipeline(strategy, details, user=None, *args, **kwargs):
     url = 'http://localhost:8880/' if settings.DEBUG else 'http://events.shackspace.de/'
-    url = f'{url}#token={user.auth_token.key}'
+    url = '{url}#token={key}'.format(url=url, key=user.auth_token.key)
     return strategy.redirect(url)
