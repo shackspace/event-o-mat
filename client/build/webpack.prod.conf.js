@@ -13,7 +13,7 @@ var webpackConfig = merge(baseWebpackConfig, {
 	mode: 'production',
 	resolve: {
 		alias: {
-			'config': path.resolve(projectRoot, process.env.TARGET == 'production' ? 'config.prod.js' : process.env.TARGET == 'testing' ? 'config.test.js' : 'config.stage.js'),
+			'config': path.resolve(projectRoot, 'config.prod.js'),
 		}
 	},
 	devtool: '#source-map',
