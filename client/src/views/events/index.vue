@@ -67,6 +67,6 @@ export default {
 				width: 96px
 				padding-right: 16px
 			.room
-				width: 72px
+				width: 80px
 
 </style>
