@@ -9,12 +9,13 @@
 			.heading
 				h1 {{ event.name }}
 				transition(name="edit-button")
-					bunt-link-button(v-if="$route.name !== 'events:edit'", :to="{name: 'events:edit'}") edit
+					bunt-link-button(v-if="user.authenticated && $route.name !== 'events:edit' && $route.name !== 'events:new'", :to="{name: 'events:edit'}") edit
 			h4 {{ event.start | datetime }} – {{ event.end | datetime }}
 			h4 {{ event.room ? roomsLookup[event.room].name : '–' }}
 			.description(v-html="markdown", v-scrollbar.y="")
 </template>
 <script>
+import api from 'lib/api'
 import { mapState } from 'vuex'
 import MarkdownIt from 'markdown-it'
 import EventForm from './form'
@@ -33,33 +34,41 @@ export default {
 		}
 	},
 	computed: {
-		...mapState(['roomsLookup']),
+		...mapState(['roomsLookup', 'user']),
 		markdown () {
 			return markdownIt.render(this.event.description)
 		}
 	},
 	created () {
-		if (!this.id) {
-			this.loading = false
-			this.event = {
-				name: '',
-				description: '',
-				start: '',
-				end: '',
-				room: null
-			}
-			return
-		}
-		api.events.get(this.id).then((event) => {
-			this.event = event
-			this.loading = false
-		})
+		this.routeUpdated()
 	},
 	mounted () {
 		this.$nextTick(() => {
 		})
 	},
-	methods: {}
+	watch: {
+		'id': 'routeUpdated'
+	},
+	methods: {
+		routeUpdated () {
+			if (!this.id) {
+				this.loading = false
+				this.event = {
+					name: '',
+					description: '',
+					start: '',
+					end: '',
+					room: null
+				}
+				return
+			}
+			this.loading = true
+			api.events.get(this.id).then((event) => {
+				this.event = event
+				this.loading = false
+			})
+		}
+	}
 }
 </script>
 <style lang="stylus">

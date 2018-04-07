@@ -11,7 +11,6 @@ import 'components/directives'
 import 'components/filters'
 
 import Main from './main.vue'
-moment.locale('en')
 Vue.use(Router)
 Vue.use(Buntpapier)
 Vue.use(Vuelidate)
@@ -25,6 +24,7 @@ let router = new Router({
 
 router.beforeEach((to, from, next) => {
 	if (to.matched.some(record => record.meta.requiresAuth) && !api.auth.authenticated) {
+		localStorage.setItem('redirectPath', `${window.location.pathname}`)
 		next({path: '/login'})
 	} else {
 		next()
@@ -39,6 +39,11 @@ window.api = api
 api.auth.getSession().then(() => {
 	console.log('initing!')
 	new Vue(Main).$mount('#v-app')
+	// restore url before login
+	if (store.state.user.authenticated && localStorage.redirectPath) {
+		router.replace(localStorage.redirectPath)
+		localStorage.removeItem('redirectPath')
+	}
 }).catch((error) => {
 	console.error(error)
 	new Vue(Main).$mount('#v-app')

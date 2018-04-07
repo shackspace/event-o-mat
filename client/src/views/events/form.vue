@@ -1,8 +1,8 @@
 <template lang="jade">
 .c-event-form
 	.actions
-		bunt-button#create(@click.native="save", :loading="saving", :error!="errorSaving") {{ creation ? 'create' : 'save' }}
-		bunt-link-button(:to="{name: 'events:item'}", @click.native="restore") cancel
+		bunt-button#create(@click="save", :loading="saving", :error!="errorSaving") {{ creation ? 'create' : 'save' }}
+		bunt-link-button(v-if="!creation", :to="{name: 'events:item', params: {id: event.id}}", @click="restore") cancel
 	bunt-input(name="name", label="Event Name", v-model="event.name", :validation="$v.event.name")
 	bunt-input(name="start", label="Start Date/Time", v-model="event.start", :validation="$v.event.start")
 	bunt-input(name="end", label="End Date/Time", v-model="event.end", :validation="$v.event.end")
@@ -77,7 +77,7 @@ export default {
 			this.$v.$touch()
 			if (this.$v.$invalid) return
 			this.saving = true
-			api.events[this.event ? 'update' : 'create'](this.event).then((event) => {
+			api.events[this.creation ? 'create' : 'update'](this.event).then((event) => {
 				this.$router.push({name: 'events:item', params: {id: event.id}})
 				this.clearApiErrors()
 			}).catch((error) => {
@@ -119,7 +119,7 @@ export default {
 		align-self: flex-end
 	#create
 		button-style(color: $clr-primary)
-
+		width: 128px
 		margin: 8px
 	.preview
 		flex: 1

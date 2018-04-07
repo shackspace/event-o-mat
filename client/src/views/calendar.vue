@@ -1,9 +1,9 @@
 <template lang="jade">
 .c-calendar
 	.actions
-		bunt-icon-button(@click="month--") chevron_left
-		.monthlabel {{ monthMoment.format('MMMM') }}
-		bunt-icon-button(@click="month++") chevron_right
+		bunt-icon-button(@click="activeMonth = activeMonth.clone().subtract(1, 'month')") chevron_left
+		.monthlabel {{ activeMonth.format('MMMM') }}
+		bunt-icon-button(@click="activeMonth = activeMonth.clone().add(1, 'month')") chevron_right
 	.month
 		.weekday Monday
 		.weekday Tuesday
@@ -12,7 +12,7 @@
 		.weekday Friday
 		.weekday Saturday
 		.weekday Sunday
-		.day(v-for="day in Array.from({length: monthMoment.daysInMonth()}, (v, k) => k)", :style="{'grid-column': ((day + startingDay) % 7) || 7, 'grid-row': Math.ceil((day + startingDay) / 7) + 1}")
+		.day(v-for="day in Array.from({length: activeMonth.daysInMonth()}, (v, k) => k)", :style="{'grid-column': ((day + startingDay) % 7) || 7, 'grid-row': Math.ceil((day + startingDay) / 7) + 1}")
 			.label {{ day + 1 }}
 			.events
 				.event(v-for="event of eventsPerDay[day]")
@@ -27,22 +27,20 @@ export default {
 	components: {},
 	data () {
 		return {
-			month: 3
+			activeMonth: moment().startOf('month')
 		}
 	},
 	computed: {
 		...mapState(['events', 'roomsLookup']),
-		monthMoment () {
-			return moment({month: this.month - 1})
-		},
 		startingDay () {
-			return this.monthMoment.isoWeekday()
+			return this.activeMonth.isoWeekday()
 		},
 		eventsPerDay () {
 			const eventsPerDay = {}
 			for (const event of this.events) {
 				const start = moment(event.start)
-				if (start.month() !== this.month - 1) continue
+				const monthDiff = start.diff(this.activeMonth, 'months', true)
+				if (monthDiff < 0 || monthDiff >= 1) continue
 				if (!eventsPerDay[start.date()]) {
 					eventsPerDay[start.date()] = []
 				}
@@ -56,7 +54,8 @@ export default {
 		this.$nextTick(() => {
 		})
 	},
-	methods: {}
+	methods: {
+	}
 }
 </script>
 <style lang="stylus">

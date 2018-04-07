@@ -3,9 +3,14 @@ import moment from 'moment'
 
 const datetimeFormat = 'YYYY-MM-DD HH:mm'
 const timeFormat = 'HH:mm'
+const humanDatetimeFormat = 'DD. MMM HH:mm'
 
 Vue.filter('datetime', (date) => {
 	return moment(date).format(datetimeFormat)
+})
+
+Vue.filter('humandatetime', (date) => {
+	return moment(date).format(humanDatetimeFormat)
 })
 
 Vue.filter('time', (date) => {

@@ -8,8 +8,6 @@ import Calendar from 'views/calendar'
 let routes = [{
 	path: '/',
 	component: App,
-	meta: {requiresAuth: true},
-	name: 'home',
 	children: [{
 		path: '/',
 		name: 'events:list',
@@ -17,7 +15,8 @@ let routes = [{
 	}, {
 		path: 'events/new',
 		name: 'events:new',
-		component: Event
+		component: Event,
+		meta: {requiresAuth: true},
 	}, {
 		path: 'events/:id',
 		name: 'events:item',
@@ -27,15 +26,17 @@ let routes = [{
 		path: 'events/:id/edit',
 		name: 'events:edit',
 		component: Event,
-		props: true
+		props: true,
+		meta: {requiresAuth: true},
 	}, {
 		path: 'calendar',
-		name: 'calendar',
+		name: 'events:calendar',
 		component: Calendar
 	}]
 }, {
 	path: '/login',
-	component: Login
+	component: Login,
+	name: 'login'
 }]
 
 export default routes

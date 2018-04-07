@@ -23,6 +23,7 @@ let api = {
 			if (queryParams.has('token')) {
 				token = queryParams.get('token')
 				localStorage.setItem('token', token)
+				window.history.replaceState({}, document.title, '.') // remove hash from url
 			} else {
 				token = localStorage.getItem('token')
 			}

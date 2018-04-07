@@ -6,15 +6,18 @@ When there is an active project, the projects tab-nav is shown
 nav.primary(:class="{'with-secondary': hasSecondaryNavbar}")
 	.left
 		router-link(:to="{name: 'events:list'}").logo
-			img(src="~assets/images/logo.svg")
+			img(src="~assets/images/logo-white-bg-no-tagline.svg")
 	//- bunt-tabs(:active-tab="activeTab")
 	//- 	bunt-tab(header="user management", id="a-tab", @selected="tabSelected")
 	//- .actions
 	//- 	.profile-wrapper(@click="")
 	//- 		img.profile(ref="profile", :src="user", @mouseenter="showProfileTooltip = true", @mouseleave="showProfileTooltip = false")
 	//- 		tooltip(:show="showProfileTooltip") Settings
+	.actions
+		bunt-button(v-if="!user.authenticated", @click="login", :loading="loggingIn") Login
 </template>
 <script>
+import api from 'lib/api'
 import { mapState } from 'vuex'
 import Tooltip from 'buntpapier/src/tooltip'
 
@@ -23,6 +26,7 @@ export default {
 	components: {Tooltip},
 	data () {
 		return {
+			loggingIn: false,
 			showProfile: false,
 			showProfileTooltip: false
 		}
@@ -42,6 +46,10 @@ export default {
 				return // HACK prevent programatic select changing route, see computed.activeTab
 			this.$router.replace({name: id, params: this.$route.params})
 		},
+		login () {
+			this.loggingIn = true
+			api.auth.login()
+		}
 	}
 }
 </script>
@@ -53,26 +61,12 @@ nav.primary
 	flex: 0 0 48px
 	card()
 	background-color: $clr-white
-	border-bottom: solid 2px $ax-primary
+	border-bottom: solid 2px $clr-primary
 	display: flex
 	justify-content: space-between
 	transition: width .3s ease
 	border-radius: 0
 	position: relative
-
-	&.with-secondary
-		box-shadow: none
-
-	.profile
-		height: 32px
-		width: 32px
-		border-radius: 50%
-		margin-left: 8px
-		cursor: pointer
-
-	.bottom-container
-		display: flex
-		flex-direction: column
 
 	.logo
 		display: flex
@@ -84,50 +78,12 @@ nav.primary
 			height: 40px
 			margin-right: 6px
 
-	$nav-height = 48px
-	.project-bar
-		position: absolute
-		left: 0
-		right: 0
-		display: flex
-		justify-content: space-around
-		border-radius: 0
-		flex: 1
-		z-index: 100
-		align-self: flex-end
-		.bunt-tabs
-			width: auto
-			tabs-style(
-				background-color: transparent,
-				color: $clr-secondary-text-light,
-				active-color: $clr-primary-text-light,
-				indicator-color: $ax-primary
-			)
-			margin-bottom: 0
-			.bunt-tabs-indicator
-				height: 5px
-			.bunt-tabs-body
-				display: none
-	.left
+	> .left
 		z-index: 101
 		display: flex
-	.project-name
-		h1
-			color: $clr-primary-text-light
-			margin: 0 4px 0px 16px
-			line-height: $nav-height
-			font-size: 14px
-			font-weight: 300
-			span.project-id
-				margin-left: 4px
-				font-weight: 400
-				&::after
-					content: ' – '
-			span.project-name
-				font-weight: 500
 
 	.actions
-		z-index: 101
+		// z-index: 101
 		display: flex
 		align-items: center
 		padding-right: 16px
@@ -135,42 +91,7 @@ nav.primary
 		.bunt-icon-button
 			icon-button-style(color:$clr-secondary-text-light, style:'clear')
 
-		.profile-wrapper
-			position: relative
-.bunt-drop
-	z-index: 100
-.apps-popover
-	card()
-	width: 320px
-	padding: 0px
-	.legacy-apps
-		div
-			padding: 0px 15px
-			&:hover
-				background-color: $clr-grey-100
-			a
-				display: flex
-				height: 42px
-				align-items: center
-				i
-					padding-right: 15px
-					font-size: 16px
-					color: $clr-secondary-text-light
-				span
-					font-size: 15px
-					color: $clr-secondary-text-light
-	.help-apps
-		border-bottom: border-separator()
-		>div
-			padding: 15px 15px
-			&:hover
-				background-color: $clr-grey-100
-			a
-				height: 42px
-				div
-					font-size: 18px
-					color: $clr-grey-900
-				span
-					font-size: 12px
-					color: $clr-secondary-text-light
+		.bunt-button
+			width: 128px
+			button-style(color: $clr-primary)
 </style>
