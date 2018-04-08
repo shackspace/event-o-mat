@@ -14,7 +14,6 @@
 
 </template>
 <script>
-import moment from 'moment'
 import { mapState } from 'vuex'
 import api from 'lib/api'
 import { required } from 'buntpapier/src/vuelidate/validators'
@@ -85,9 +84,6 @@ export default {
 			event.start = event.start.format()
 			event.end = event.end.format()
 			api.events[this.creation ? 'create' : 'update'](event).then((event) => {
-				// Object.assign(this.event, event)
-				// event.start = moment(event.start)
-				// event.end = moment(event.end)
 				this.$router.push({name: 'events:item', params: {id: event.id}})
 				this.clearApiErrors()
 			}).catch((error) => {

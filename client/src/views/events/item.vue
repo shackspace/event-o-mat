@@ -21,7 +21,11 @@ import moment from 'moment'
 import MarkdownIt from 'markdown-it'
 import EventForm from './form'
 
-const markdownIt = new MarkdownIt()
+const markdownIt = new MarkdownIt({
+	html: true,
+	linkify: true,
+	typographer: true
+})
 
 export default {
 	components: { EventForm },
