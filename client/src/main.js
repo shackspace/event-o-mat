@@ -35,6 +35,7 @@ Main.router = router
 Main.store = store
 
 window.api = api
+window.moment = moment
 
 api.auth.getSession().then(() => {
 	console.log('initing!')

@@ -3,7 +3,7 @@
 	bunt-progress-circular(v-if="loading", size="huge", :page="true")
 	template(v-else)
 		transition(name="edit")
-			.edit-pane(v-if="$route.name === 'events:edit' || $route.name === 'events:new'")
+			.edit-pane(v-if="$route.name === 'events:edit' || $route.name === 'events:new'", key="edit")
 				event-form(:event="event", :creation="$route.name === 'events:new'")
 		.preview
 			.heading
@@ -17,6 +17,7 @@
 <script>
 import api from 'lib/api'
 import { mapState } from 'vuex'
+import moment from 'moment'
 import MarkdownIt from 'markdown-it'
 import EventForm from './form'
 
@@ -56,14 +57,16 @@ export default {
 				this.event = {
 					name: '',
 					description: '',
-					start: '',
-					end: '',
+					start: moment(),
+					end: moment(),
 					room: null
 				}
 				return
 			}
 			this.loading = true
 			api.events.get(this.id).then((event) => {
+				event.start = moment(event.start)
+				event.end = moment(event.end)
 				this.event = event
 				this.loading = false
 			})
@@ -83,12 +86,14 @@ export default {
 	.edit-pane
 		width: 50vw
 		display: flex
+		order: 1
 	.preview
 		flex: 1 1 50vw
 		max-width: 50vw
 		padding: 0 64px
 		display: flex
 		flex-direction: column
+		order: 2
 		.heading
 			display: flex
 			justify-content: space-between

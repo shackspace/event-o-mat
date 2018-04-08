@@ -4,8 +4,8 @@
 		bunt-button#create(@click="save", :loading="saving", :error!="errorSaving") {{ creation ? 'create' : 'save' }}
 		bunt-link-button(v-if="!creation", :to="{name: 'events:item', params: {id: event.id}}", @click="restore") cancel
 	bunt-input(name="name", label="Event Name", v-model="event.name", :validation="$v.event.name")
-	bunt-input(name="start", label="Start Date/Time", v-model="event.start", :validation="$v.event.start")
-	bunt-input(name="end", label="End Date/Time", v-model="event.end", :validation="$v.event.end")
+	datepicker(name="start", label="Start Date/Time", v-model="event.start", :validation="$v.event.start")
+	datepicker(name="end", label="End Date/Time", v-model="event.end", :validation="$v.event.end")
 	bunt-select(name="room", label="Room", v-model="event.room", :options="rooms", option-label="name", option-value="id", :validation="$v.event.room")
 	p Description:
 	.description
@@ -14,13 +14,15 @@
 
 </template>
 <script>
+import moment from 'moment'
 import { mapState } from 'vuex'
 import api from 'lib/api'
 import { required } from 'buntpapier/src/vuelidate/validators'
 import { apiValidator, apiValidatorMixin } from 'components/mixins/api-error-validation'
+import Datepicker from 'components/datepicker'
 
 export default {
-	components: {},
+	components: { Datepicker },
 	mixins: [apiValidatorMixin],
 	props: {
 		event: Object,
@@ -66,6 +68,8 @@ export default {
 	},
 	created () {
 		this.backup = Object.assign({}, this.event)
+		this.backup.start = this.backup.start.clone()
+		this.backup.end = this.backup.end.clone()
 	},
 	mounted () {
 		this.$nextTick(() => {
@@ -77,7 +81,13 @@ export default {
 			this.$v.$touch()
 			if (this.$v.$invalid) return
 			this.saving = true
-			api.events[this.creation ? 'create' : 'update'](this.event).then((event) => {
+			const event = Object.assign({}, this.event)
+			event.start = event.start.format()
+			event.end = event.end.format()
+			api.events[this.creation ? 'create' : 'update'](event).then((event) => {
+				// Object.assign(this.event, event)
+				// event.start = moment(event.start)
+				// event.end = moment(event.end)
 				this.$router.push({name: 'events:item', params: {id: event.id}})
 				this.clearApiErrors()
 			}).catch((error) => {

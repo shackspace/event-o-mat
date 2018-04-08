@@ -5,13 +5,13 @@
 		.monthlabel {{ activeMonth.format('MMMM') }}
 		bunt-icon-button(@click="activeMonth = activeMonth.clone().add(1, 'month')") chevron_right
 	.month
-		.weekday Monday
-		.weekday Tuesday
-		.weekday Wednesday
-		.weekday Thursday
-		.weekday Friday
-		.weekday Saturday
-		.weekday Sunday
+		.weekday Montag
+		.weekday Dienstag
+		.weekday Mittwoch
+		.weekday Donnerstag
+		.weekday Freitag
+		.weekday Samstag
+		.weekday Sonntag
 		.day(v-for="day in Array.from({length: activeMonth.daysInMonth()}, (v, k) => k)", :style="{'grid-column': ((day + startingDay) % 7) || 7, 'grid-row': Math.ceil((day + startingDay) / 7) + 1}")
 			.label {{ day + 1 }}
 			.events
@@ -39,8 +39,7 @@ export default {
 			const eventsPerDay = {}
 			for (const event of this.events) {
 				const start = moment(event.start)
-				const monthDiff = start.diff(this.activeMonth, 'months', true)
-				if (monthDiff < 0 || monthDiff >= 1) continue
+				if (!start.isSame(this.activeMonth, 'month')) continue
 				if (!eventsPerDay[start.date()]) {
 					eventsPerDay[start.date()] = []
 				}
