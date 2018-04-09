@@ -28,6 +28,7 @@ class Event(models.Model):
 
     start = models.DateTimeField()
     end = models.DateTimeField()
+    created = models.DateTimeField(auto_now_add=True)
 
     publish = models.BooleanField(default=False)
     room = models.ForeignKey(to=Room, on_delete=models.PROTECT, related_name='events')
