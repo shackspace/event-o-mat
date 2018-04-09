@@ -31,6 +31,7 @@ def test_event_list(event_with_series, client, attendance):
         'id': event.id,
         'name': event.name,
         'description': event.description,
+        'created': event.created.astimezone(pytz.timezone('Europe/Berlin')).isoformat(),
         'start': event.start.astimezone(pytz.timezone('Europe/Berlin')).isoformat(),
         'end': event.end.astimezone(pytz.timezone('Europe/Berlin')).isoformat(),
         'publish': event.publish,
