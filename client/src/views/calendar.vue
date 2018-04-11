@@ -4,7 +4,7 @@
 		bunt-icon-button(@click="activeMonth = activeMonth.clone().subtract(1, 'month')") chevron_left
 		.monthlabel {{ activeMonth.format('MMMM') }}
 		bunt-icon-button(@click="activeMonth = activeMonth.clone().add(1, 'month')") chevron_right
-	.month
+	.month(v-scrollbar.y="")
 		.weekday Montag
 		.weekday Dienstag
 		.weekday Mittwoch
@@ -12,19 +12,20 @@
 		.weekday Freitag
 		.weekday Samstag
 		.weekday Sonntag
-		.day(v-for="day in Array.from({length: activeMonth.daysInMonth()}, (v, k) => k)", :style="{'grid-column': ((day + startingDay) % 7) || 7, 'grid-row': Math.ceil((day + startingDay) / 7) + 1}")
+		.day(v-for="day in Array.from({length: activeMonth.daysInMonth()}, (v, k) => k)", :style="{'grid-column': ((day + startingDay) % 7) || 7, 'grid-row': Math.ceil((day + startingDay) / 7) + 1, '--events-count': eventsPerDay[day] ? eventsPerDay[day].length : 0}")
 			.label {{ day + 1 }}
 			.events
-				.event(v-for="event of eventsPerDay[day]")
+				event-link.event(v-for="event of eventsPerDay[day]", :event="event")
 					span.time {{ event.start | time }}
 					span.name {{ event.name }}
 </template>
 <script>
 import moment from 'moment'
 import { mapState } from 'vuex'
+import EventLink from 'components/event-link'
 
 export default {
-	components: {},
+	components: { EventLink },
 	data () {
 		return {
 			activeMonth: moment().startOf('month')
@@ -40,10 +41,11 @@ export default {
 			for (const event of this.events) {
 				const start = moment(event.start)
 				if (!start.isSame(this.activeMonth, 'month')) continue
-				if (!eventsPerDay[start.date()]) {
-					eventsPerDay[start.date()] = []
+				const startDay = start.date() - 1
+				if (!eventsPerDay[startDay]) {
+					eventsPerDay[startDay] = []
 				}
-				eventsPerDay[start.date()].push(event)
+				eventsPerDay[startDay].push(event)
 			}
 			return eventsPerDay
 		}
@@ -64,12 +66,14 @@ export default {
 	flex: 1
 	display: flex
 	flex-direction: column
+	min-height: 0
 	.actions
 		display: flex
 		align-items: center
 		width: 128px
 		justify-content: space-between
 	.month
+		position: relative
 		flex: 1
 		display: grid
 		grid-template-columns: repeat(7, 1fr)
@@ -77,24 +81,36 @@ export default {
 		padding: 0 16px
 		grid-gap: 1px
 	.weekday
-		grid-row: 1
+		grid-row: 1event-link
 	.day
 		outline: 1px solid $clr-grey-300
+		min-width: 0
+		overflow-x: hidden
+		// height: fit-content no FF support
+		height: calc(var(--events-count) *  36px + 27px)
+		min-height: 100%
 		.label
 			color: $clr-secondary-text-light
 			padding: 4px 0 0 4px
+	.events
+		display: flex
+		flex-direction: column
+		margin-top: 4px
 	.event
 		display: block
+		color: $clr-primary-text-dark
 		background-color: $clr-primary
-		border: 1px solid $clr-green
+		font-weight: 600
 		border-radius: 2px
 		grid-column: 5 / span 2
 		grid-row: 3
-		margin: 24px 8px
+		margin: 0 8px 4px 8px
 		height: 24px
 		line-height: @height
-		padding: 8px 16px
-
+		padding: 4px 16px
+		text-overflow: ellipsis
+		white-space: nowrap
+		overflow: hidden
 		.time
 			padding-right: 8px
 </style>
