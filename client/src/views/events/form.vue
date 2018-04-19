@@ -1,19 +1,25 @@
 <template lang="jade">
 .c-event-form
 	.actions
-		bunt-button#create(@click="save", :loading="saving", :error!="errorSaving", :error-message="error") {{ creation ? 'create' : 'save' }}
-		bunt-link-button(v-if="!creation", :to="{name: 'events:item', params: {id: event.id}}", @click="restore") cancel
-	bunt-input(name="name", label="Event Name", v-model="event.name", :validation="$v.event.name")
-	datepicker(name="start", label="Start Date/Time", v-model="event.start", :validation="$v.event.start")
-	datepicker(name="end", label="End Date/Time", v-model="event.end", :validation="$v.event.end")
-	bunt-select(name="room", label="Room", v-model="event.room", :options="rooms", option-label="name", option-value="id", :validation="$v.event.room")
-	bunt-switch(name="publish", v-model="event.publish", label="Announce to website?")
-	p Description:
-	.description
-		textarea(v-model="event.description")
-	a(href="https://guides.github.com/features/mastering-markdown/", title: "mardown cheatsheet", target="_blank") you can format your description with markdown
-	//- bunt-input(name="description", label="Description", v-model="event.description", :validation="$v.event.description")
-
+		bunt-button#delete(v-if="!creation", @click="confirmDelete = true") delete
+		.form-actions
+			bunt-button#create(@click="save", :loading="saving", :error!="errorSaving", :error-message="error") {{ creation ? 'create' : 'save' }}
+			bunt-link-button(v-if="!creation", :to="{name: 'events:item', params: {id: event.id}}", @click="restore") cancel
+	.scroll(v-scrollbar.y="")
+		bunt-input(name="name", label="Event Name", v-model="event.name", :validation="$v.event.name")
+		datepicker(name="start", label="Start Date/Time", v-model="event.start", :validation="$v.event.start")
+		datepicker(name="end", label="End Date/Time", v-model="event.end", :validation="$v.event.end")
+		bunt-select(name="room", label="Room", v-model="event.room", :options="rooms", option-label="name", option-value="id", :validation="$v.event.room")
+		bunt-switch(name="publish", v-model="event.publish", label="Announce to website?")
+		p Description:
+		.description
+			textarea(v-model="event.description")
+		a(href="https://guides.github.com/features/mastering-markdown/", title: "mardown cheatsheet", target="_blank") you can format your description with markdown
+	bunt-dialog.event-form-dialog(:open="confirmDelete", @close="confirmDelete = false")
+		h1 Do you really want to delete this event?
+		.confirm-actions
+			bunt-button#cancel-delete(@click="confirmDelete = false") cancel
+			bunt-button#confirm-delete(@click="deleteEvent", :loading="deleting", :error-message="deleteError") delete
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -37,7 +43,10 @@ export default {
 			saving: false,
 			error: null,
 			errorSaving: false,
-			backup: null
+			backup: null,
+			deleting: false,
+			confirmDelete: false,
+			deleteError: null
 		}
 	},
 	validations () {
@@ -100,6 +109,15 @@ export default {
 		},
 		restore () {
 			Object.assign(this.event, this.backup)
+		},
+		deleteEvent () {
+			this.deleting = true
+			api.events.delete(this.event).then(() => {
+				this.$router.push({name: 'events:list'})
+			}).catch((error) => {
+				this.deleting = false
+				this.deleteError = error.json.detail
+			})
 		}
 	}
 }
@@ -112,6 +130,9 @@ export default {
 	flex: 1 1 50vw
 	padding: 32px 64px 0
 	box-sizing: border-box
+	.scroll
+		padding: 16px 0
+		position: relative
 	.bunt-input
 		width: 25vw
 		min-width: 240px
@@ -127,12 +148,31 @@ export default {
 		flex: 1
 		resize: none
 		border: none
+		min-height: 512px
 	.actions
-		align-self: flex-end
+		display: flex
+		flex: 1 0 auto
+		padding-bottom: 24px
+		justify-content: space-between
+	#delete
+		button-style(color: $clr-danger)
 	#create
 		button-style(color: $clr-primary)
 		width: 128px
-		margin: 8px
+		margin: 0 8px
 	.preview
 		flex: 1
+.bunt-dialog
+	padding: 16px
+	display: flex
+	flex-direction: column
+	align-items: center
+
+	.confirm-actions
+		align-self: flex-end
+		#confirm-delete
+			button-style(color: $clr-danger)
+		#cancel-delete
+			button-style(style: 'clear')
+			margin-right: 8px
 </style>

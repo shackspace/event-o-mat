@@ -3,7 +3,7 @@ from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
 from .models import Attendance, Event, Room, Series
-from .permissions import KeyholderPermission
+from .permissions import KeyholderPermission, OwnerDeletePermission
 from .serialisers import (
     EventEditSerialiser, EventListSerialiser, RoomSerialiser, SeriesSerialiser,
 )
@@ -23,7 +23,7 @@ class SeriesViewSet(viewsets.ModelViewSet):
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
-    permission_classes = (KeyholderPermission, )
+    permission_classes = (KeyholderPermission, OwnerDeletePermission, )
 
     def get_serializer_class(self, *args, **kwargs):
         if self.action == 'list':

@@ -10,3 +10,12 @@ class KeyholderPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         return request.user.is_staff
+
+
+class OwnerDeletePermission(permissions.BasePermission):
+    message = 'Only creator may delete event.'
+
+    def has_object_permission(self, request, view, obj):
+        if request.method == 'DELETE':
+            return request.user == obj.keyholder
+        return True

@@ -56,6 +56,9 @@ let api = {
 		create (event) {
 			return api.fetch('events/', 'POST', event)
 		},
+		delete (event) {
+			return api.fetch(`events/${event.id}/`, 'DELETE')
+		}
 	}
 }
 
@@ -66,6 +69,9 @@ api.fetch = function (url, method, body) {
 		body: JSON.stringify(body)
 	}
 	return window.fetch(url.startsWith('http') ? url : BASE_URL + url, options).then((response) => {
+		if (response.status === 204) {
+			return Promise.resolve(response)
+		}
 		return response.json().then((json) => {
 			if (!response.ok) {
 				const error = new Error('Request Failed!')
