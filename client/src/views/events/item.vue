@@ -63,7 +63,8 @@ export default {
 					description: '',
 					start: moment(),
 					end: moment(),
-					room: null
+					room: null,
+					publish: false
 				}
 				return
 			}
