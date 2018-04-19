@@ -97,7 +97,7 @@ export default {
 		},
 		emitInput () {
 			const date = this.activeMonth.clone()
-			date.set('day', this.activeDay)
+			date.set('date', this.activeDay)
 			date.set('hour', this.$refs.hours.value)
 			date.set('minute', this.$refs.minutes.value)
 			this.$emit('input', date)
