@@ -91,7 +91,7 @@ export default {
 			}).catch((error) => {
 				this.saving = false
 				this.errorSaving = true
-				this.handleApiErrors(error.json)
+				this.handleApiErrors(error)
 				if (error.json.detail) {
 					this.error = error.json.detail
 				}
