@@ -11,6 +11,7 @@
 	p Description:
 	.description
 		textarea(v-model="event.description")
+	a(href="https://guides.github.com/features/mastering-markdown/", title: "mardown cheatsheet", target="_blank") you can format your description with markdown
 	//- bunt-input(name="description", label="Description", v-model="event.description", :validation="$v.event.description")
 
 </template>
