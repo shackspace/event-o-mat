@@ -2,8 +2,9 @@
 .c-calendar
 	.actions
 		bunt-icon-button(@click="activeMonth = activeMonth.clone().subtract(1, 'month')") chevron_left
-		.monthlabel {{ activeMonth.format('MMMM') }}
+		.monthlabel {{ activeMonth.format('MMMM YYYY') }}
 		bunt-icon-button(@click="activeMonth = activeMonth.clone().add(1, 'month')") chevron_right
+		bunt-button(@click="backToCurrentMonth") to current month
 	.month(v-scrollbar.y="")
 		.weekday Montag
 		.weekday Dienstag
@@ -12,7 +13,7 @@
 		.weekday Freitag
 		.weekday Samstag
 		.weekday Sonntag
-		.day(v-for="day in Array.from({length: activeMonth.daysInMonth()}, (v, k) => k)", :style="{'grid-column': ((day + startingDay) % 7) || 7, 'grid-row': Math.ceil((day + startingDay) / 7) + 1, '--events-count': eventsPerDay[day] ? eventsPerDay[day].length : 0}")
+		.day(v-for="day in Array.from({length: activeMonth.daysInMonth()}, (v, k) => k)", :style="{'grid-column': ((day + startingDay) % 7) || 7, 'grid-row': Math.ceil((day + startingDay) / 7) + 1, '--events-count': eventsPerDay[day] ? eventsPerDay[day].length : 0}", :class="{today: isToday(day + 1)}")
 			.label {{ day + 1 }}
 			.events
 				event-link.event(v-for="event of eventsPerDay[day]", :event="event")
@@ -56,6 +57,12 @@ export default {
 		})
 	},
 	methods: {
+		backToCurrentMonth () {
+			this.activeMonth = moment().startOf('month')
+		},
+		isToday (date) {
+			return this.activeMonth.clone().set('date', date).isSame(moment(), 'date')
+		}
 	}
 }
 </script>
@@ -68,10 +75,14 @@ export default {
 	flex-direction: column
 	min-height: 0
 	.actions
+		height: 52px
 		display: flex
 		align-items: center
-		width: 128px
+		width: 360px
 		justify-content: space-between
+
+		.bunt-button
+			button-style(style: 'clear')
 	.month
 		position: relative
 		flex: 1
@@ -87,11 +98,24 @@ export default {
 		min-width: 0
 		overflow-x: hidden
 		// height: fit-content no FF support
-		height: calc(var(--events-count) *  36px + 27px)
+		height: calc(var(--events-count) *  36px + 35px)
 		min-height: 100%
 		.label
 			color: $clr-secondary-text-light
-			padding: 4px 0 0 4px
+			padding: 6px 0
+			margin: 2px
+			text-align: center
+			width: 28px
+			height: @width
+			box-sizing: border-box
+		&.today
+			background-color: $clr-grey-200
+			.label
+				font-weight: 600
+				background-color: $clr-primary
+				color: $clr-primary-text-dark
+
+				border-radius: 50%
 	.events
 		display: flex
 		flex-direction: column
