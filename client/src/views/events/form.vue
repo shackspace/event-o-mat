@@ -1,7 +1,7 @@
 <template lang="jade">
 .c-event-form
 	.actions
-		bunt-button#create(@click="save", :loading="saving", :error!="errorSaving") {{ creation ? 'create' : 'save' }}
+		bunt-button#create(@click="save", :loading="saving", :error!="errorSaving", :error-message="error") {{ creation ? 'create' : 'save' }}
 		bunt-link-button(v-if="!creation", :to="{name: 'events:item', params: {id: event.id}}", @click="restore") cancel
 	bunt-input(name="name", label="Event Name", v-model="event.name", :validation="$v.event.name")
 	datepicker(name="start", label="Start Date/Time", v-model="event.start", :validation="$v.event.start")
@@ -34,6 +34,7 @@ export default {
 	data () {
 		return {
 			saving: false,
+			error: null,
 			errorSaving: false,
 			backup: null
 		}
@@ -91,6 +92,9 @@ export default {
 				this.saving = false
 				this.errorSaving = true
 				this.handleApiErrors(error)
+				if (error.detail) {
+					this.error = error.detail
+				}
 			})
 		},
 		restore () {

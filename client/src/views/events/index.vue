@@ -45,6 +45,7 @@ export default {
 	width: 900px
 	max-width: 900px
 	flex-direction: column
+	overflow: hidden
 	.actions
 		flex: 0 0 36px
 		height: 36px
@@ -58,7 +59,9 @@ export default {
 			link-button-style(color: $clr-primary)
 	.events-list
 		margin-top: 16px
+		overflow: hidden
 		.event
+			flex: 0 0 auto
 			.name
 				flex: 1
 			.date
