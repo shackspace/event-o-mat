@@ -20,7 +20,7 @@
 				.weekday Fr
 				.weekday Sa
 				.weekday So
-				.day(v-for="day in Array.from({length: activeMonth.daysInMonth()}, (v, k) => k)", :class="{active: value.isSame(activeMonth.clone().set('day', day), 'day')}", :style="{'grid-column': ((day + startingDay) % 7) || 7, 'grid-row': Math.ceil((day + startingDay) / 7) + 1}", @click="selectDay(day)") {{ day + 1 }}
+				.day(v-for="day in Array.from({length: activeMonth.daysInMonth()}, (v, k) => k)", :class="{active: value.isSame(activeMonth.clone().set('day', day), 'day')}", :style="{'grid-column': ((day + startingDay) % 7) || 7, 'grid-row': Math.ceil((day + startingDay) / 7) + 1}", @click="selectDay(day + 1)") {{ day + 1 }}
 		.timepicker
 			.bunt-input.dense
 				input(ref="hours", name="hours", :value="value.format('HH')", @mousedown="yieldToTimeInputs = true", @blur="onTimeBlur")
