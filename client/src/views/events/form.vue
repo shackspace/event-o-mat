@@ -151,7 +151,7 @@ export default {
 		min-height: 512px
 	> .actions
 		display: flex
-		flex: 1 0 auto
+		flex: 0 0 auto
 		padding-bottom: 24px
 		justify-content: space-between
 	#delete
