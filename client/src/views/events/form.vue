@@ -149,7 +149,7 @@ export default {
 		resize: none
 		border: none
 		min-height: 512px
-	.actions
+	> .actions
 		display: flex
 		flex: 1 0 auto
 		padding-bottom: 24px
