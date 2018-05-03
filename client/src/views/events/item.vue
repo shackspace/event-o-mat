@@ -86,7 +86,8 @@ export default {
 	align-self: center
 	display: flex
 	justify-content: center
-	flex: 1
+	flex: 1 0 0
+	overflow: hidden
 	position: relative
 	.edit-pane
 		width: 50vw
