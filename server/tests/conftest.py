@@ -34,7 +34,7 @@ def event_without_series(room, keyholder_user):
         start=now() + timedelta(days=1),
         end=now() + timedelta(hours=25),
         publish=True,
-        keyholder=keyholder_user,
+        modified_by=keyholder_user,
         room=room
     )
 
@@ -46,7 +46,7 @@ def event_with_series(room, keyholder_user, series):
         start=now() + timedelta(days=1),
         end=now() + timedelta(hours=25),
         publish=True,
-        keyholder=keyholder_user,
+        modified_by=keyholder_user,
         series=series,
         room=room
     )

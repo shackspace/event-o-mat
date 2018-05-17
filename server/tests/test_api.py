@@ -32,11 +32,13 @@ def test_event_list(event_with_series, client, attendance):
         'name': event.name,
         'description': event.description,
         'created': event.created.astimezone(pytz.timezone('Europe/Berlin')).isoformat(),
+        'deleted': False,
+        'modified_date': event.modified_date.astimezone(pytz.timezone('Europe/Berlin')).isoformat(),
+        'modified_by': {'id': event.modified_by.id, 'username': event.modified_by.username},
         'start': event.start.astimezone(pytz.timezone('Europe/Berlin')).isoformat(),
         'end': event.end.astimezone(pytz.timezone('Europe/Berlin')).isoformat(),
         'publish': event.publish,
         'series': {'id': event.series.id, 'name': event.series.name, 'room': None, 'start': None, 'end': None},
-        'keyholder': {'id': event.keyholder.id, 'username': event.keyholder.username},
         'room': event.room.id,
         'attendances': [
             {

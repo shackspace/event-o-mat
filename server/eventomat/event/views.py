@@ -46,3 +46,7 @@ class EventViewSet(viewsets.ModelViewSet):
             )
         Attendance.objects.get_or_create(event=event, user=request.user, defaults={'state': state})
         return Response(status=status.HTTP_200_OK)
+
+    def perform_destroy(self, instance):
+        instance.deleted = True
+        instance.save(update_fields=['deleted'])

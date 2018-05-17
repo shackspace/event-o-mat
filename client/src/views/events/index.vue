@@ -9,7 +9,7 @@
 				.name {{ event.name }}
 				.date(v-if="event.start.diff(event.end, 'days') > 0") {{ event.start | humandatetime }} - {{ event.end | humandatetime }}
 				.date(v-else) {{ event.start | humandatetime }} - {{ event.end | time }}
-				.keyholder {{ event.keyholder.username }}
+				//- .keyholder {{ event.keyholder.username }}
 				.room {{ roomsLookup[event.room].name }}
 </template>
 <script>

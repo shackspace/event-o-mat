@@ -42,13 +42,13 @@ class SeriesSerialiser(serializers.ModelSerializer):
 class EventListSerialiser(serializers.ModelSerializer):
     series = SeriesSerialiser(many=False, required=False)
     attendances = AttendanceSerialiser(many=True, read_only=True)
-    keyholder = UserSerialiser(many=False)
+    modified_by = UserSerialiser(many=False)
 
     class Meta:
         model = Event
         fields = (
             'id', 'name', 'description', 'created', 'start', 'end',
-            'publish', 'room', 'series', 'keyholder',
+            'publish', 'room', 'series', 'modified_by', 'modified_date', 'deleted',
             'attendances',
         )
 
@@ -56,7 +56,7 @@ class EventListSerialiser(serializers.ModelSerializer):
 class EventEditSerialiser(serializers.ModelSerializer):
 
     def validate(self, data):
-        data['keyholder'] = self.context['request'].user
+        data['modified_by'] = self.context['request'].user
         return data
 
     class Meta:

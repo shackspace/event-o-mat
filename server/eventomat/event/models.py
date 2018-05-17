@@ -29,11 +29,13 @@ class Event(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField()
     created = models.DateTimeField(auto_now_add=True)
+    deleted = models.BooleanField(default=False)
+    modified_by = models.ForeignKey('auth.User', on_delete=models.PROTECT)
+    modified_date = models.DateTimeField(auto_now=True)
 
     publish = models.BooleanField(default=False)
     room = models.ForeignKey(to=Room, on_delete=models.PROTECT, related_name='events')
     series = models.ForeignKey(to=Series, on_delete=models.PROTECT, related_name='events', null=True, blank=True)
-    keyholder = models.ForeignKey('auth.User', on_delete=models.PROTECT, related_name='keyholder_events')
 
     def __str__(self):
         s = 'Event: {name}'.format(name=self.name)
