@@ -23,8 +23,11 @@ def room():
 
 
 @pytest.fixture
-def series():
-    return Series.objects.create(name='Best series')
+def series(keyholder_user):
+    return Series.objects.create(
+        name='Best series',
+        modified_by=keyholder_user
+    )
 
 
 @pytest.fixture

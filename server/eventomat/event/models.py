@@ -20,6 +20,7 @@ class Series(models.Model):
     end = models.TimeField(null=True, blank=True)
     room = models.ForeignKey(to=Room, on_delete=models.PROTECT, null=True, blank=True, related_name='series')
     rrule = models.CharField(max_length=256, null=True, blank=True)
+    keyholder = models.CharField(max_length=256, null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     deleted = models.BooleanField(default=False)
@@ -44,6 +45,7 @@ class Event(models.Model):
     publish = models.BooleanField(default=False)
     room = models.ForeignKey(to=Room, on_delete=models.PROTECT, related_name='events')
     series = models.ForeignKey(to=Series, on_delete=models.PROTECT, related_name='events', null=True, blank=True)
+    keyholder = models.CharField(max_length=256, null=True, blank=True)
 
     def __str__(self):
         s = 'Event: {name}'.format(name=self.name)

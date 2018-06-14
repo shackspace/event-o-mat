@@ -1,8 +1,8 @@
+from dateutil.rrule import rrulestr
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from rest_framework.fields import TimeField
 from rest_framework.exceptions import ValidationError
-from dateutil.rrule import rrulestr
+from rest_framework.fields import TimeField
 
 from .models import Attendance, Event, Room, Series
 

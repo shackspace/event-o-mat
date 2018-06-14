@@ -38,7 +38,7 @@ def test_event_list(event_with_series, client, attendance):
         'start': event.start.astimezone(pytz.timezone('Europe/Berlin')).isoformat(),
         'end': event.end.astimezone(pytz.timezone('Europe/Berlin')).isoformat(),
         'publish': event.publish,
-        'series': {'id': event.series.id, 'name': event.series.name, 'room': None, 'start': None, 'end': None},
+        'series': 1,
         'room': event.room.id,
         'attendances': [
             {
@@ -58,6 +58,12 @@ def test_series_list(series, client):
     assert content[0] == {
         'id': series.id,
         'name': series.name,
+        'description': series.description,
+        'created': series.created.astimezone(pytz.timezone('Europe/Berlin')).isoformat(),
+        'deleted': False,
+        'modified_date': series.modified_date.astimezone(pytz.timezone('Europe/Berlin')).isoformat(),
+        'modified_by': {'id': series.modified_by.id, 'username': series.modified_by.username},
+        'rrule': None,
         'start': None,
         'end': None,
         'room': None,

@@ -17,7 +17,6 @@
 <script>
 import api from 'lib/api'
 import { mapState } from 'vuex'
-import moment from 'moment'
 import MarkdownIt from 'markdown-it'
 import SeriesForm from './form'
 

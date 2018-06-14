@@ -12,7 +12,6 @@
 				.room {{ roomsLookup[series.room].name }}
 </template>
 <script>
-import moment from 'moment'
 import { mapState } from 'vuex'
 export default {
 	components: { },

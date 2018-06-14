@@ -1,15 +1,16 @@
+from datetime import datetime
+
+from dateutil.relativedelta import relativedelta
+from dateutil.rrule import rrulestr
 from rest_framework import status, viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
-from datetime import datetime
-from dateutil.rrule import rrulestr
-from dateutil.relativedelta import relativedelta
-
 from .models import Attendance, Event, Room, Series
 from .permissions import KeyholderPermission
 from .serialisers import (
-    EventEditSerialiser, EventListSerialiser, RoomSerialiser, SeriesEditSerialiser, SeriesListSerialiser,
+    EventEditSerialiser, EventListSerialiser, RoomSerialiser,
+    SeriesEditSerialiser, SeriesListSerialiser,
 )
 
 
@@ -50,8 +51,9 @@ class EventViewSet(viewsets.ModelViewSet):
         events = list(events)
         seriesList = Series.objects.all()
         for series in seriesList:
+            if not series.rrule:
+                continue
             year_from_now = datetime.now() + relativedelta(years=1)
-            print(year_from_now)
             rrule = rrulestr(series.rrule).replace(until=year_from_now)
             for date in rrule:
                 start = date.replace(hour=series.start.hour, minute=series.start.minute, second=0)
