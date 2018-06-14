@@ -40,6 +40,7 @@ def test_event_list(event_with_series, client, attendance):
         'publish': event.publish,
         'series': 1,
         'room': event.room.id,
+        'keyholder': None,
         'attendances': [
             {
                 'user': {'username': attendance.user.username, 'id': attendance.user.id},
@@ -67,6 +68,7 @@ def test_series_list(series, client):
         'start': None,
         'end': None,
         'room': None,
+        'keyholder': None,
     }
 
 

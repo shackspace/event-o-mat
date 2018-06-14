@@ -10,7 +10,7 @@
 		bunt-input(name="start", label="Start Time", v-model="series.start", :validation="$v.series.start")
 		bunt-input(name="end", label="End Time", v-model="series.end", :validation="$v.series.end")
 		bunt-select(name="room", label="Room", v-model="series.room", :options="rooms", option-label="name", option-value="id", :validation="$v.series.room")
-		bunt-input(name="keyholder", label="Keyholder(s)", v-model="event.keyholder")
+		bunt-input(name="keyholder", label="Keyholder(s)", v-model="series.keyholder")
 		bunt-input(name="rrule", label="Recurrence Rule", v-model="series.rrule", :validation="$v.series.rrule", hint="uses the <a href='https://icalendar.org/iCalendar-RFC-5545/3-8-5-3-recurrence-rule.html' target='_blank'>ical rrule format</a>. (DTSTART is not needed)", :hint-is-html="true")
 		p
 		p Description:
