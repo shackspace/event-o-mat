@@ -1,6 +1,5 @@
 /* global Headers, URLSearchParams */
 import config from 'config'
-import querystring from 'querystring'
 
 const BASE_URL = config.api.baseUrl
 let headers = new Headers()
@@ -58,6 +57,23 @@ let api = {
 		},
 		delete (event) {
 			return api.fetch(`events/${event.id}/`, 'DELETE')
+		}
+	},
+	series: {
+		list () {
+			return api.fetch(`series/`)
+		},
+		get (id) {
+			return api.fetch(`series/${id}/`)
+		},
+		update (event) {
+			return api.fetch(`series/${event.id}/`, 'PUT', event)
+		},
+		create (event) {
+			return api.fetch('series/', 'POST', event)
+		},
+		delete (event) {
+			return api.fetch(`series/${event.id}/`, 'DELETE')
 		}
 	}
 }

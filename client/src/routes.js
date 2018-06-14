@@ -5,12 +5,15 @@ import EventsList from 'views/events'
 import Event from 'views/events/item'
 import Calendar from 'views/calendar'
 
+import SeriesList from 'views/series'
+import Series from 'views/series/item'
+
 let routes = [{
 	path: '/',
 	component: App,
 	children: [{
 		path: '/',
-		name: 'events:list',
+		name: 'events',
 		component: EventsList
 	}, {
 		path: 'events/new',
@@ -27,11 +30,32 @@ let routes = [{
 		name: 'events:edit',
 		component: Event,
 		props: true,
-		meta: {requiresAuth: true},
+		meta: {requiresAuth: true}
 	}, {
 		path: 'calendar',
 		name: 'events:calendar',
 		component: Calendar
+	}, {
+		path: 'series',
+		name: 'series',
+		component: SeriesList,
+		meta: {requiresAuth: true}
+	}, {
+		path: 'series/new',
+		name: 'series:new',
+		component: Series,
+		meta: {requiresAuth: true}
+	}, {
+		path: 'series/:id',
+		name: 'series:item',
+		component: Series,
+		props: true,
+	}, {
+		path: 'series/:id/edit',
+		name: 'series:edit',
+		component: Series,
+		props: true,
+		meta: {requiresAuth: true}
 	}]
 }, {
 	path: '/login',

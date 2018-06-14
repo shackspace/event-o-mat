@@ -1,25 +1,26 @@
 <template lang="jade">
-.c-event-form
+.c-series-form
 	.actions
 		bunt-button#delete(v-if="!creation", @click="confirmDelete = true") delete
 		.form-actions
 			bunt-button#create(@click="save", :loading="saving", :error!="errorSaving", :error-message="error") {{ creation ? 'create' : 'save' }}
-			bunt-link-button(v-if="!creation", :to="{name: 'events:item', params: {id: event.id}}", @click="restore") cancel
+			bunt-link-button(v-if="!creation", :to="{name: 'series:item', params: {id: series.id}}", @click="restore") cancel
 	.scroll(v-scrollbar.y="")
-		bunt-input(name="name", label="Event Name", v-model="event.name", :validation="$v.event.name")
-		datepicker(name="start", label="Start Date/Time", v-model="event.start", :validation="$v.event.start")
-		datepicker(name="end", label="End Date/Time", v-model="event.end", :validation="$v.event.end")
-		bunt-select(name="room", label="Room", v-model="event.room", :options="rooms", option-label="name", option-value="id", :validation="$v.event.room")
-		bunt-switch(name="publish", v-model="event.publish", label="Announce to website?")
+		bunt-input(name="name", label="Series Name", v-model="series.name", :validation="$v.series.name")
+		bunt-input(name="start", label="Start Time", v-model="series.start", :validation="$v.series.start")
+		bunt-input(name="end", label="End Time", v-model="series.end", :validation="$v.series.end")
+		bunt-select(name="room", label="Room", v-model="series.room", :options="rooms", option-label="name", option-value="id", :validation="$v.series.room")
+		bunt-input(name="rrule", label="Recurrence Rule", v-model="series.rrule", :validation="$v.series.rrule", hint="uses the <a href='https://icalendar.org/iCalendar-RFC-5545/3-8-5-3-recurrence-rule.html' target='_blank'>ical rrule format</a>. (DTSTART is not needed)", :hint-is-html="true")
+		p
 		p Description:
 		.description
-			textarea(v-model="event.description")
+			textarea(v-model="series.description")
 		a(href="https://guides.github.com/features/mastering-markdown/", title: "mardown cheatsheet", target="_blank") you can format your description with markdown
-	bunt-dialog.event-form-dialog(:open="confirmDelete", @close="confirmDelete = false")
-		h1 Do you really want to delete this event?
+	bunt-dialog.series-form-dialog(:open="confirmDelete", @close="confirmDelete = false")
+		h1 Do you really want to delete this series?
 		.confirm-actions
 			bunt-button#cancel-delete(@click="confirmDelete = false") cancel
-			bunt-button#confirm-delete(@click="deleteEvent", :loading="deleting", :error-message="deleteError") delete
+			bunt-button#confirm-delete(@click="deleteSeries", :loading="deleting", :error-message="deleteError") delete
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -32,7 +33,7 @@ export default {
 	components: { Datepicker },
 	mixins: [apiValidatorMixin],
 	props: {
-		event: Object,
+		series: Object,
 		creation: {
 			type: Boolean,
 			default: false
@@ -40,10 +41,10 @@ export default {
 	},
 	data () {
 		return {
+			backup: null,
 			saving: false,
 			error: null,
 			errorSaving: false,
-			backup: null,
 			deleting: false,
 			confirmDelete: false,
 			deleteError: null
@@ -51,25 +52,29 @@ export default {
 	},
 	validations () {
 		return {
-			event: {
+			series: {
 				name: {
 					apiValidator: apiValidator.bind(this)('name'),
-					required: required('Events without names are pretty useless, eh?')
+					required: required('Series without names are pretty useless, eh?')
 				},
 				description: {
 					apiValidator: apiValidator.bind(this)('description'),
 				},
 				start: {
 					apiValidator: apiValidator.bind(this)('start'),
-					required: required('event needs a start date')
+					required: required('series needs a start date')
 				},
 				end: {
 					apiValidator: apiValidator.bind(this)('end'),
-					required: required('event needs an end date')
+					required: required('series needs an end date')
 				},
 				room: {
 					apiValidator: apiValidator.bind(this)('room'),
 					required: required('need to choose a room!')
+				},
+				rrule: {
+					apiValidator: apiValidator.bind(this)('rrule'),
+					required: required('no recurrence without a rule!')
 				}
 			}
 		}
@@ -78,9 +83,7 @@ export default {
 		...mapState(['rooms'])
 	},
 	created () {
-		this.backup = Object.assign({}, this.event)
-		this.backup.start = this.backup.start.clone()
-		this.backup.end = this.backup.end.clone()
+		this.backup = Object.assign({}, this.series)
 	},
 	mounted () {
 		this.$nextTick(() => {
@@ -92,12 +95,11 @@ export default {
 			this.$v.$touch()
 			if (this.$v.$invalid) return
 			this.saving = true
-			const event = Object.assign({}, this.event)
-			event.start = event.start.format()
-			event.end = event.end.format()
-			api.events[this.creation ? 'create' : 'update'](event).then((event) => {
-				this.$router.push({name: 'events:item', params: {id: event.id}})
+			this.errorSaving = false
+			api.series[this.creation ? 'create' : 'update'](this.series).then((series) => {
+				this.$router.push({name: 'series:edit', params: {id: series.id}})
 				this.clearApiErrors()
+				this.saving = false
 			}).catch((error) => {
 				this.saving = false
 				this.errorSaving = true
@@ -110,10 +112,10 @@ export default {
 		restore () {
 			Object.assign(this.event, this.backup)
 		},
-		deleteEvent () {
+		deleteSeries () {
 			this.deleting = true
-			api.events.delete(this.event).then(() => {
-				this.$router.push({name: 'events'})
+			api.series.delete(this.series).then(() => {
+				this.$router.push({name: 'series'})
 			}).catch((error) => {
 				this.deleting = false
 				this.deleteError = error.json.detail
@@ -124,7 +126,7 @@ export default {
 </script>
 <style lang="stylus">
 @import '~_settings'
-.c-event-form
+.c-series-form
 	display: flex
 	flex-direction: column
 	flex: 1 1 50vw

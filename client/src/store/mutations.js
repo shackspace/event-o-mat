@@ -8,6 +8,9 @@ const mutations = {
 	},
 	SET_EVENTS (state, events) {
 		state.events = events
+	},
+	SET_SERIES_LIST (state, seriesList) {
+		state.seriesList = seriesList
 	}
 }
 

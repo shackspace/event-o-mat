@@ -5,10 +5,11 @@ When there is an active project, the projects tab-nav is shown
 <template lang="jade">
 nav.primary(:class="{'with-secondary': hasSecondaryNavbar}")
 	.left
-		router-link(:to="{name: 'events:list'}").logo
+		router-link(:to="{name: 'events'}").logo
 			img(src="~assets/images/logo-white-bg-no-tagline.svg")
-	//- bunt-tabs(:active-tab="activeTab")
-	//- 	bunt-tab(header="user management", id="a-tab", @selected="tabSelected")
+	bunt-tabs(v-if="user.authenticated", :active-tab="activeTab")
+		bunt-tab(header="Events", id="events", @selected="tabSelected")
+		bunt-tab(header="Series", id="series", @selected="tabSelected")
 	//- .actions
 	//- 	.profile-wrapper(@click="")
 	//- 		img.profile(ref="profile", :src="user", @mouseenter="showProfileTooltip = true", @mouseleave="showProfileTooltip = false")

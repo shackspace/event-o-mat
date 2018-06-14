@@ -10,7 +10,8 @@ const state = {
 	user: null,
 	rooms: null,
 	roomsLookup: {},
-	events: null
+	events: null,
+	seriesList: null
 }
 
 const store = new Vuex.Store({

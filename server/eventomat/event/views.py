@@ -2,10 +2,14 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
+from datetime import datetime
+from dateutil.rrule import rrulestr
+from dateutil.relativedelta import relativedelta
+
 from .models import Attendance, Event, Room, Series
 from .permissions import KeyholderPermission
 from .serialisers import (
-    EventEditSerialiser, EventListSerialiser, RoomSerialiser, SeriesSerialiser,
+    EventEditSerialiser, EventListSerialiser, RoomSerialiser, SeriesEditSerialiser, SeriesListSerialiser,
 )
 
 
@@ -17,8 +21,16 @@ class RoomViewSet(viewsets.ReadOnlyModelViewSet):
 
 class SeriesViewSet(viewsets.ModelViewSet):
     queryset = Series.objects.all()
-    serializer_class = SeriesSerialiser
     permission_classes = (KeyholderPermission, )
+
+    def get_serializer_class(self, *args, **kwargs):
+        if self.action == 'list':
+            return SeriesListSerialiser
+        return SeriesEditSerialiser
+
+    def perform_destroy(self, instance):
+        instance.deleted = True
+        instance.save(update_fields=['deleted'])
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -32,8 +44,21 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_anonymous:
-            return Event.objects.filter(deleted=False)
-        return Event.objects.all()
+            events = Event.objects.filter(deleted=False)
+        else:
+            events = Event.objects.all()
+        events = list(events)
+        seriesList = Series.objects.all()
+        for series in seriesList:
+            year_from_now = datetime.now() + relativedelta(years=1)
+            print(year_from_now)
+            rrule = rrulestr(series.rrule).replace(until=year_from_now)
+            for date in rrule:
+                start = date.replace(hour=series.start.hour, minute=series.start.minute, second=0)
+                end = date.replace(hour=series.end.hour, minute=series.end.minute, second=0)
+                event = Event(name=series.name, description=series.description, start=start, end=end, room=series.room, series=series)
+                events.append(event)
+        return events
 
     @detail_route(methods=['post'])
     def attend(self, request, pk):

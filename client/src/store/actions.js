@@ -4,7 +4,7 @@ import { plenumForWeek } from 'lib/plenum'
 
 const actions = {
 	'fetch-all' ({dispatch}) {
-		return Promise.all([dispatch('fetch-user'), dispatch('fetch-rooms'), dispatch('fetch-events')])
+		return Promise.all([dispatch('fetch-user'), dispatch('fetch-rooms'), dispatch('fetch-events'), dispatch('fetch-series')])
 	},
 	'fetch-user' ({commit}) {
 		// return api.users.me().then((user) => {
@@ -17,6 +17,12 @@ const actions = {
 		return api.rooms.list().then((rooms) => {
 			commit('SET_ROOMS', rooms)
 			return Promise.resolve()
+		})
+	},
+	'fetch-series' ({commit}) {
+		return api.series.list().then((series) => {
+			commit('SET_SERIES_LIST', series)
+			return Promise.resolve(series)
 		})
 	},
 	'fetch-events' ({commit}) {
