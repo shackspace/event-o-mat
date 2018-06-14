@@ -10,6 +10,7 @@
 		datepicker(name="start", label="Start Date/Time", v-model="event.start", :validation="$v.event.start")
 		datepicker(name="end", label="End Date/Time", v-model="event.end", :validation="$v.event.end")
 		bunt-select(name="room", label="Room", v-model="event.room", :options="rooms", option-label="name", option-value="id", :validation="$v.event.room")
+		bunt-input(name="keyholder", label="Keyholder(s)", v-model="event.keyholder")
 		bunt-switch(name="publish", v-model="event.publish", label="Announce to website?")
 		p Description:
 		.description

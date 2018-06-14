@@ -40,7 +40,7 @@ class SeriesListSerialiser(serializers.ModelSerializer):
         model = Series
         fields = (
             'id', 'name', 'description', 'room', 'start', 'end', 'rrule',
-            'created', 'modified_by', 'modified_date', 'deleted',
+            'created', 'modified_by', 'modified_date', 'deleted', 'keyholder'
         )
 
 
@@ -62,7 +62,7 @@ class SeriesEditSerialiser(serializers.ModelSerializer):
     class Meta:
         model = Series
         fields = (
-            'id', 'name', 'description', 'room', 'start', 'end', 'rrule',
+            'id', 'name', 'description', 'room', 'start', 'end', 'rrule', 'keyholder'
         )
 
 
@@ -76,7 +76,7 @@ class EventListSerialiser(serializers.ModelSerializer):
         fields = (
             'id', 'name', 'description', 'created', 'start', 'end',
             'publish', 'room', 'modified_by', 'modified_date', 'deleted',
-            'attendances', 'series'
+            'attendances', 'series', 'keyholder'
         )
 
 
@@ -90,5 +90,5 @@ class EventEditSerialiser(serializers.ModelSerializer):
         model = Event
         fields = (
             'id', 'name', 'description', 'start', 'end',
-            'publish', 'room', 'series',
+            'publish', 'room', 'series', 'keyholder'
         )

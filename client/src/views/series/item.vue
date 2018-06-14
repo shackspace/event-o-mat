@@ -12,6 +12,7 @@
 					bunt-link-button(v-if="user.authenticated && $route.name !== 'series:edit' && $route.name !== 'series:new'", :to="{name: 'series:edit'}") edit
 			h4 {{ series.start }} – {{ series.end }}
 			h4 {{ series.room ? roomsLookup[series.room].name : '–' }}
+			h5 Keyholder(s): {{ series.keyholder }}
 			.description(v-html="markdown", v-scrollbar.y="")
 </template>
 <script>
@@ -63,7 +64,8 @@ export default {
 					start: '00:00',
 					end: '00:00',
 					room: null,
-					rrule: ''
+					rrule: '',
+					keyholder: ''
 				}
 				return
 			}

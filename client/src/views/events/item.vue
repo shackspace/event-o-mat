@@ -12,6 +12,7 @@
 					bunt-link-button(v-if="user.authenticated && $route.name !== 'events:edit' && $route.name !== 'events:new'", :to="{name: 'events:edit'}") edit
 			h4 {{ event.start | datetime }} – {{ event.end | datetime }}
 			h4 {{ event.room ? roomsLookup[event.room].name : '–' }}
+			h5 Keyholder(s): {{ event.keyholder }}
 			.description(v-html="markdown", v-scrollbar.y="")
 </template>
 <script>
@@ -64,7 +65,8 @@ export default {
 					start: moment(),
 					end: moment(),
 					room: null,
-					publish: false
+					publish: false,
+					keyholder: ''
 				}
 				return
 			}

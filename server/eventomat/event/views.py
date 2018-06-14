@@ -48,6 +48,8 @@ class EventViewSet(viewsets.ModelViewSet):
             events = Event.objects.filter(deleted=False)
         else:
             events = Event.objects.all()
+        if self.action != 'list':
+            return events
         events = list(events)
         seriesList = Series.objects.all()
         for series in seriesList:
