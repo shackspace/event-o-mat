@@ -25,7 +25,7 @@ export default {
 	computed: {
 		...mapState(['events', 'roomsLookup', 'user']),
 		futureEvents () {
-			return this.events.filter((event) => event.start.diff(moment()) > 0)
+			return this.events.filter((event) => event.end.diff(moment()) > 0)
 		}
 	},
 	created () {},
