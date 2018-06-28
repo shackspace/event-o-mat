@@ -30,6 +30,10 @@ let api = {
 			headers.set('Authorization', 'Token ' + token)
 			api.auth.authenticated = true
 			return Promise.resolve()
+		},
+		logout () {
+			localStorage.clear()
+			window.location = '/'
 		}
 	},
 	users: {

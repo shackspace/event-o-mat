@@ -16,6 +16,7 @@ nav.primary(:class="{'with-secondary': hasSecondaryNavbar}")
 	//- 		tooltip(:show="showProfileTooltip") Settings
 	.actions
 		bunt-button(v-if="!user.authenticated", @click="login", :loading="loggingIn") Login
+		bunt-button(v-else, @click="logout") Logout
 </template>
 <script>
 import api from 'lib/api'
@@ -50,6 +51,9 @@ export default {
 		login () {
 			this.loggingIn = true
 			api.auth.login()
+		},
+		logout () {
+			api.auth.logout()
 		}
 	}
 }
