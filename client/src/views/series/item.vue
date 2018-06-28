@@ -10,12 +10,18 @@
 				h1 {{ series.name }}
 				transition(name="edit-button")
 					bunt-link-button(v-if="user.authenticated && $route.name !== 'series:edit' && $route.name !== 'series:new'", :to="{name: 'series:edit'}") edit
-			h4 {{ series.start }} – {{ series.end }}
+			template(v-if="rrule")
+				h4 {{ rrule.toText() }} :: {{ series.start }} – {{ series.end }}
+				h4 Next Date: {{ nextDate | date }} {{ series.start }} – {{ series.end }}
+			template(v-else)
+				h2 INVALID RRULE SYNTAX
 			h4 {{ series.room ? roomsLookup[series.room].name : '–' }}
 			h5 Keyholder(s): {{ series.keyholder }}
 			.description(v-html="markdown", v-scrollbar.y="")
 </template>
 <script>
+import { rrulestr } from 'rrule'
+import moment from 'moment'
 import api from 'lib/api'
 import { mapState } from 'vuex'
 import MarkdownIt from 'markdown-it'
@@ -42,6 +48,22 @@ export default {
 		...mapState(['roomsLookup', 'user']),
 		markdown () {
 			return markdownIt.render(this.series.description)
+		},
+		rrule () {
+			try {
+				const rule = rrulestr(this.series.rrule)
+				for (const prop in rule.origOptions) {
+					if (isNaN(rule.origOptions[prop])) {
+						return null
+					}
+				}
+				return rule
+			} catch (error) {
+				return null
+			}
+		},
+		nextDate () {
+			return this.rrule.between(new Date(), moment().add(1, 'year').toDate())[0]
 		}
 	},
 	created () {

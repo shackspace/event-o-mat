@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import moment from 'moment'
 
+const dateFormat = 'YYYY-MM-DD'
 const datetimeFormat = 'YYYY-MM-DD HH:mm'
 const timeFormat = 'HH:mm'
 const humanDatetimeFormat = 'DD. MMM HH:mm'
@@ -11,6 +12,10 @@ Vue.filter('datetime', (date) => {
 
 Vue.filter('humandatetime', (date) => {
 	return moment(date).format(humanDatetimeFormat)
+})
+
+Vue.filter('date', (date) => {
+	return moment(date).format(dateFormat)
 })
 
 Vue.filter('time', (date) => {

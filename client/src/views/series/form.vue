@@ -24,11 +24,22 @@
 			bunt-button#confirm-delete(@click="deleteSeries", :loading="deleting", :error-message="deleteError") delete
 </template>
 <script>
+import { rrulestr } from 'rrule'
 import { mapState } from 'vuex'
 import api from 'lib/api'
 import { required } from 'buntpapier/src/vuelidate/validators'
 import { apiValidator, apiValidatorMixin } from 'components/mixins/api-error-validation'
 import Datepicker from 'components/datepicker'
+
+import { withParams } from 'vuelidate/lib/validators/common'
+const validRrule = (message) => withParams({message: message}, value => {
+	try {
+		rrulestr(value)
+		return true
+	} catch {
+		return false
+	}
+})
 
 export default {
 	components: { Datepicker },
@@ -75,7 +86,8 @@ export default {
 				},
 				rrule: {
 					apiValidator: apiValidator.bind(this)('rrule'),
-					required: required('no recurrence without a rule!')
+					required: required('no recurrence without a rule!'),
+					rrule: validRrule('invalid rrule syntax')
 				}
 			}
 		}
