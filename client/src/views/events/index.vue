@@ -2,7 +2,7 @@
 .c-events-index
 	.actions
 		bunt-link-button(:to="{name: 'events:calendar'}") view calendar
-		bunt-link-button(v-if="user.authenticated", :to="{name: 'events:new'}") new event
+		bunt-link-button(v-if="user.authenticated && user.hasPermissions", :to="{name: 'events:new'}") new event
 	.events-list.list
 		.tbody(v-scrollbar.y="")
 			event-link.event.item(v-for="event in futureEvents", :event="event")

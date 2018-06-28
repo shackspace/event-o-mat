@@ -38,7 +38,7 @@ let api = {
 	},
 	users: {
 		me () {
-			return api.fetch(`me/`)
+			return api.fetch(`user`)
 		}
 	},
 	rooms: {

@@ -7,11 +7,14 @@ const actions = {
 		return Promise.all([dispatch('fetch-user'), dispatch('fetch-rooms'), dispatch('fetch-events'), dispatch('fetch-series')])
 	},
 	'fetch-user' ({commit}) {
-		// return api.users.me().then((user) => {
-		commit('SET_USER', {
-			authenticated: api.auth.authenticated
+		return api.users.me().then((user) => {
+			commit('SET_USER', {
+				username: user.username,
+				hasPermissions: user.is_staff,
+				authenticated: api.auth.authenticated
+			})
+			return Promise.resolve()
 		})
-		return Promise.resolve()
 	},
 	'fetch-rooms' ({commit}) {
 		return api.rooms.list().then((rooms) => {

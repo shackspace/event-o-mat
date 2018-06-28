@@ -30,4 +30,5 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url('', include('social_django.urls', namespace='social')),
     url(r'^', include(router.urls)),
+    url('user', views.OwnUser.as_view()),
 ]

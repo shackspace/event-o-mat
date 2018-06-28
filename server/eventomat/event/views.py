@@ -5,12 +5,13 @@ from dateutil.rrule import rrulestr
 from rest_framework import status, viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Attendance, Event, Room, Series
 from .permissions import KeyholderPermission
 from .serialisers import (
     EventEditSerialiser, EventListSerialiser, RoomSerialiser,
-    SeriesEditSerialiser, SeriesListSerialiser,
+    SeriesEditSerialiser, SeriesListSerialiser, UserSerialiser,
 )
 
 
@@ -84,3 +85,9 @@ class EventViewSet(viewsets.ModelViewSet):
     def perform_destroy(self, instance):
         instance.deleted = True
         instance.save(update_fields=['deleted'])
+
+
+class OwnUser(APIView):
+    def get(self, request):
+        serializer = UserSerialiser(request.user)
+        return Response(serializer.data)

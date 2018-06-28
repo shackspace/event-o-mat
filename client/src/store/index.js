@@ -7,7 +7,11 @@ import actions from './actions'
 Vue.use(Vuex)
 
 const state = {
-	user: null,
+	user: {
+		username: null,
+		authenticated: false,
+		hasPermissions: false
+	},
 	rooms: null,
 	roomsLookup: {},
 	events: null,
