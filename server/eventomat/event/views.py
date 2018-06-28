@@ -10,8 +10,8 @@ from rest_framework.views import APIView
 from .models import Attendance, Event, Room, Series
 from .permissions import KeyholderPermission
 from .serialisers import (
-    EventEditSerialiser, EventListSerialiser, RoomSerialiser,
-    SeriesEditSerialiser, SeriesListSerialiser, UserSerialiser,
+    EventEditSerialiser, EventListSerialiser, OwnUserSerialiser,
+    RoomSerialiser, SeriesEditSerialiser, SeriesListSerialiser,
 )
 
 
@@ -89,5 +89,5 @@ class EventViewSet(viewsets.ModelViewSet):
 
 class OwnUser(APIView):
     def get(self, request):
-        serializer = UserSerialiser(request.user)
+        serializer = OwnUserSerialiser(request.user)
         return Response(serializer.data)
