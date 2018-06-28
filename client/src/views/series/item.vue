@@ -53,7 +53,9 @@ export default {
 			try {
 				const rule = rrulestr(this.series.rrule)
 				for (const prop in rule.origOptions) {
-					if (isNaN(rule.origOptions[prop])) {
+					const value = rule.origOptions[prop]
+					if (prop !== 'dtstart' && !Array.isArray(value) && isNaN(value)) {
+						console.log(prop)
 						return null
 					}
 				}
@@ -63,6 +65,7 @@ export default {
 			}
 		},
 		nextDate () {
+			if (!this.rrule) return null
 			return this.rrule.between(new Date(), moment().add(1, 'year').toDate())[0]
 		}
 	},
