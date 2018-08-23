@@ -56,6 +56,24 @@ const actions = {
 			commit('SET_EVENTS', events)
 			return Promise.resolve()
 		})
+	},
+	'create-event' ({commit}, event) {
+		return api.events.create(event).then(event => {
+			commit('ADD_EVENT', event)
+			return Promise.resolve(event)
+		})
+	},
+	'update-event' ({commit}, event) {
+		return api.events.update(event).then(event => {
+			commit('UPDATE_EVENT', event)
+			return Promise.resolve(event)
+		})
+	},
+	'delete-event' ({commit}, event) {
+		return api.events.delete(event).then(() => {
+			commit('REMOVE_EVENT', event)
+			return Promise.resolve()
+		})
 	}
 }
 

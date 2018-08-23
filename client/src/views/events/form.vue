@@ -96,7 +96,7 @@ export default {
 			const event = Object.assign({}, this.event)
 			event.start = event.start.format()
 			event.end = event.end.format()
-			api.events[this.creation ? 'create' : 'update'](event).then((event) => {
+			this.$store.dispatch((this.creation ? 'create' : 'update') + '-event', event).then((event) => {
 				this.$router.push({name: 'events:item', params: {id: event.id}})
 				this.clearApiErrors()
 			}).catch((error) => {
@@ -113,7 +113,7 @@ export default {
 		},
 		deleteEvent () {
 			this.deleting = true
-			api.events.delete(this.event).then(() => {
+			this.$store.dispatch('delete-event', this.event).then(() => {
 				this.$router.push({name: 'events'})
 			}).catch((error) => {
 				this.deleting = false

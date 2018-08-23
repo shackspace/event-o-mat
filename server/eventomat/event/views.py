@@ -45,10 +45,7 @@ class EventViewSet(viewsets.ModelViewSet):
         return EventEditSerialiser
 
     def get_queryset(self):
-        if self.request.user.is_anonymous:
-            events = Event.objects.filter(deleted=False)
-        else:
-            events = Event.objects.all()
+        events = Event.objects.filter(deleted=False)
         if self.action != 'list':
             return events
         events = list(events)
