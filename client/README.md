@@ -10,6 +10,8 @@ npm start
 cp config.stage.js config.dev.js
 ```
 
+Note: The client builds fine using nodejs-lts (currently at v10.16.3)
+
 ## Folder structure
 ```
 ┣━━ build: webpack configs and build scripts
