@@ -2,6 +2,7 @@ from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 from dateutil.rrule import rrulestr
+from django.utils.timezone import make_aware
 from rest_framework import status, viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
@@ -49,16 +50,19 @@ class EventViewSet(viewsets.ModelViewSet):
         if self.action != 'list':
             return events
         events = list(events)
-        seriesList = Series.objects.all()
-        for series in seriesList:
+        series_list = Series.objects.all()
+        for series in series_list:
             if not series.rrule:
                 continue
             year_from_now = datetime.now() + relativedelta(years=1)
             rrule = rrulestr(series.rrule).replace(until=year_from_now)
             for date in rrule:
-                start = date.replace(hour=series.start.hour, minute=series.start.minute, second=0)
-                end = date.replace(hour=series.end.hour, minute=series.end.minute, second=0)
-                event = Event(name=series.name, description=series.description, start=start, end=end, room=series.room, series=series)
+                start = make_aware(date.replace(
+                    hour=series.start.hour, minute=series.start.minute, second=0))
+                end = make_aware(date.replace(
+                    hour=series.end.hour, minute=series.end.minute, second=0))
+                event = Event(name=series.name, description=series.description,
+                              start=start, end=end, room=series.room, series=series)
                 events.append(event)
         return events
 
@@ -68,7 +72,8 @@ class EventViewSet(viewsets.ModelViewSet):
         state = request.data.get('state', 'yes')
         if state not in ('yes', 'no', 'maybe'):
             return Response(
-                'Status must be yes, no, or maybe, not {state}.'.format(state=state),
+                'Status must be yes, no, or maybe, not {state}.'.format(
+                    state=state),
                 status=status.HTTP_400_BAD_REQUEST,
             )
         if request.user.is_anonymous:
@@ -76,12 +81,20 @@ class EventViewSet(viewsets.ModelViewSet):
                 'User must not be anonymous.',
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        Attendance.objects.get_or_create(event=event, user=request.user, defaults={'state': state})
+        Attendance.objects.get_or_create(
+            event=event, user=request.user, defaults={'state': state})
         return Response(status=status.HTTP_200_OK)
 
     def perform_destroy(self, instance):
         instance.deleted = True
         instance.save(update_fields=['deleted'])
+
+
+class FutureEventViewSet(EventViewSet):
+    def get_queryset(self):
+        if self.action != 'list':
+            return EventViewSet.get_queryset(self).filter(end__gte=datetime.now())
+        return [x for x in EventViewSet.get_queryset(self) if x.end >= make_aware(datetime.now())]
 
 
 class OwnUser(APIView):

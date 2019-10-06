@@ -22,6 +22,7 @@ from eventomat.event import views
 
 router = routers.DefaultRouter()
 router.register(r'events', views.EventViewSet)
+router.register(r'future_events', views.FutureEventViewSet)
 router.register(r'series', views.SeriesViewSet)
 router.register(r'rooms', views.RoomViewSet)
 
