@@ -72,4 +72,20 @@ export default {
 			.room
 				width: 92px
 
+@media only screen and (max-width: 900px)
+	.c-events-index
+		width: 360px
+		max-width: 360px
+		.events-list
+			.event
+				flex-wrap: wrap
+				.name
+					min-width: 360px
+					max-width: 360px
+				.date
+					width: 150px
+					padding-left: 48px
+				.room
+					flex: 1
+
 </style>
