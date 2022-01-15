@@ -51,7 +51,7 @@
     "ora": "^1.4.0",
     "raw-loader": "^0.5.1",
     "rupture": "^0.7.1",
-    "shelljs": "^0.8.1",
+    "shelljs": "^0.8.5",
     "style-loader": "^0.20.3",
     "stylus": "^0.54.2",
     "stylus-loader": "^3.0.2",
